@@ -27,14 +27,15 @@ define("OAUTH_CALLBACK",     'http://localhost:8080/XeroOAuth-PHP/example.php');
  * Application specific settings
  * Not all are required for given application types
  * consumer_key: required for all applications
- * shared_secret: not needed for partner applications
+ * shared_secret:  for partner applications, set to: s (cannot be blank)
  * rsa_private_key: not needed for public applications
  * rsa_public_key: not needed for public applications
  */
 $signatures = array( 'consumer_key'     => 'YOURCONSUMERKEY',
-              	      	 'shared_secret'    => 'YOURSECRET',
+              	      	 'shared_secret'    => 's',
                 	     'rsa_private_key'	=> BASE_PATH . '/certs/rq-partner-app-2-privatekey.pem',
-                     	 'rsa_public_key'	=> BASE_PATH . '/certs/rq-partner-app-2-publickey.cer');
+                     	 'rsa_public_key'	=> BASE_PATH . '/certs/rq-partner-app-2-publickey.cer');/**
+
                      	 
 /**
  * Partner applications require a Client SSL certificate which is issued by Xero
