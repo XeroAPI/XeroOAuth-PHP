@@ -21,6 +21,9 @@ $output = 'Authorizing...';
     	$options[CURLOPT_RETURNTRANSFER] = 1;
     	$options[CURLOPT_SSL_VERIFYHOST] = 0;
     	$options[CURLOPT_SSL_VERIFYPEER] = 0;
+    	$useragent = isset($useragent) ? USER_AGENT : 'XeroOAuth-PHP';
+    	$options[CURLOPT_USERAGENT] = $useragent;
+    	//curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
                      
 switch (XRO_APP_TYPE) {
     case "Private":

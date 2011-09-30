@@ -31,7 +31,7 @@ define("OAUTH_CALLBACK",     'http://localhost:8080/XeroOAuth-PHP/example.php');
  * rsa_private_key: not needed for public applications
  * rsa_public_key: not needed for public applications
  */
-$signatures = array( 'consumer_key'     => 'YOURCONSUMERKEY',
+$signatures = array( 'consumer_key'     => 'MWSAN8S5AAFPMMNBV3DQIEWH4TM9FE',
               	      	 'shared_secret'    => 's',
                 	     'rsa_private_key'	=> BASE_PATH . '/certs/rq-partner-app-2-privatekey.pem',
                      	 'rsa_public_key'	=> BASE_PATH . '/certs/rq-partner-app-2-publickey.cer');/**
@@ -47,6 +47,8 @@ $options[CURLOPT_SSLCERT] = BASE_PATH . '/certs/entrust-cert.pem';
 $options[CURLOPT_SSLKEYPASSWD] = '1234';
 $options[CURLOPT_SSLKEY] = BASE_PATH . '/certs/entrust-private.pem';
 
-
-
+/**
+ * It is a good idea to set a user agent for the Xero API logs
+ */
+$useragent = "";
 
