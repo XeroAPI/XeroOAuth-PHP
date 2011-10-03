@@ -21,7 +21,7 @@ define("XRO_APP_TYPE",     "Partner_Mac");
 /**
  * Set your callback url or set 'oob' if none required
  */
-define("OAUTH_CALLBACK",     'http://localhost:8080/XeroOAuth-PHP/example.php');
+define("OAUTH_CALLBACK",     'http://localhost/XeroOAuth-PHP/example.php');
 
 /**
  * Application specific settings

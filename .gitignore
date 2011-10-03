@@ -1,0 +1,12 @@
+
+certs/rq-partner-app-2-publickey.cer
+
+certs/rq-partner-app-2-privatekey.pem
+
+certs/php-test-private-rq-publickey.cer
+
+certs/php-test-private-rq-privatekey.pem
+
+certs/entrust-private.pem
+
+certs/entrust-cert.pem
