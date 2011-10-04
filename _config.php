@@ -38,6 +38,7 @@ $signatures = array( 'consumer_key'     => 'MWSAN8S5AAFPMMNBV3DQIEWH4TM9FE',
 
                      	 
 /**
+ * Special options for Partner applications - should be commented out for non-partner applications
  * Partner applications require a Client SSL certificate which is issued by Xero
  * the certificate is issued as a .p12 cert which you will then need to split into a cert and private key:
  * openssl pkcs12 -in entrust-client.p12 -clcerts -nokeys -out entrust-cert.pem

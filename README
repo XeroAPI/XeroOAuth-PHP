@@ -1,0 +1,12 @@
+SETUP
+To get setup, you will need to modify the values in the _config.php file to your own requirements and application settings
+Special options for Partner applications - should be commented out for non-partner applications
+
+DEBUGGING
+If you append: ?debug=1 to example.php so you have /example.php?debug=1
+- this will output some debug information
+- this will include a "CURL ERROR:" line
+- under this, if you are getting any errors it should provide this in the returned oauth_problem and oauth_problem_advice parameters - the error messages should be quite self explanatory
+- if there are no errors, you should just oauth_token and oauth_token_secret paramters returned, indicating all is ok
+
+
