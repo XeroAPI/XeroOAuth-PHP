@@ -76,10 +76,11 @@ if ($_SESSION&&$_REQUEST['start']==1) {
 	}
 	
 	if (!empty($_REQUEST['put'])){
-    // Example Xero API Access:
+    // Example Xero API PUT:
     $oauthObject->reset();
     $result = $oauthObject->sign(array(
         'path'      => $xro_settings['xero_url'].'/Invoices/',
+        'action'	=> 'PUT',
         'parameters'=> array(
 			'oauth_signature_method' => $xro_settings['signature_method']),
         'signatures'=> $signatures));
@@ -92,6 +93,7 @@ if ($_SESSION&&$_REQUEST['start']==1) {
     </Contact>
     <Date>2011-10-01T00:00:00</Date>
     <DueDate>2011-10-08T00:00:00</DueDate>
+    <InvoiceNumber>ORC1042</InvoiceNumber>
     <LineAmountTypes>Exclusive</LineAmountTypes>
     <LineItems>
       <LineItem>
@@ -123,6 +125,59 @@ if ($_SESSION&&$_REQUEST['start']==1) {
 	
 	echo 'CURL RESULT: <textarea cols="160" rows="40">' . $r . '</textarea><br/>';
 	}
+	
+	if (!empty($_REQUEST['post'])){
+    // Example Xero API Post - update invoice to Authorised status
+    $oauthObject->reset();
+    $result = $oauthObject->sign(array(
+        'path'      => $xro_settings['xero_url'].'/Invoices/',
+        'action'	=> 'POST',
+        'parameters'=> array(
+			'oauth_signature_method' => $xro_settings['signature_method']),
+        'signatures'=> $signatures));
+        
+    $xml = "<Invoices>
+  <Invoice>
+    <Type>ACCREC</Type>
+    <Contact>
+      <Name>Martin Hudson</Name>
+    </Contact>
+    <Date>2011-10-01T00:00:00</Date>
+    <DueDate>2011-10-08T00:00:00</DueDate>
+    <InvoiceNumber>ORC1042</InvoiceNumber>
+     <Status>AUTHORISED</Status>
+    <LineAmountTypes>Exclusive</LineAmountTypes>
+    <LineItems>
+      <LineItem>
+        <Description>Monthly rental for property at 56a Wilkins Avenue</Description>
+        <Quantity>4.3400</Quantity>
+        <UnitAmount>395.00</UnitAmount>
+        <AccountCode>200</AccountCode>
+      </LineItem>
+    </LineItems>
+  </Invoice>
+</Invoices>";
+	$fh  = fopen('php://memory', 'w+');
+	fwrite($fh, $xml);
+	rewind($fh);
+	$ch = curl_init();
+	curl_setopt_array($ch, $options);
+	curl_setopt($ch, CURLOPT_PUT, true);
+	curl_setopt($ch, CURLOPT_INFILE, $fh);
+	curl_setopt($ch, CURLOPT_INFILESIZE, strlen($xml));
+    curl_setopt($ch, CURLOPT_URL, $result['signed_url']);
+	$r = curl_exec($ch);
+	curl_close($ch);
+	
+	parse_str($r, $returned_items);		   
+	$oauth_problem = $returned_items['oauth_problem'];
+		if($oauth_problem){
+			session_destroy();
+		}
+	
+	echo 'CURL RESULT: <textarea cols="160" rows="40">' . $r . '</textarea><br/>';
+	}
+	
 	// Example Xero API AccessToken swap:
 	if (!empty($_REQUEST['action'])){
 		$oauthObject->reset();
@@ -331,5 +386,6 @@ else {
 <a href="<?php echo $_SERVER['PHP_SELF'] . SID ?>?endpoint=Journals&start=1">Journals</a><br/>
 <a href="<?php echo $_SERVER['PHP_SELF'] . SID ?>?action=ChangeToken&start=1">Token Refresh</a><br/>
 <a href="<?php echo $_SERVER['PHP_SELF'] . SID ?>?put=put&start=1">PUT Invoice</a><br/>
+<a href="<?php echo $_SERVER['PHP_SELF'] . SID ?>?post=post&start=1">POST Invoice update</a><br/>
 </BODY>
 </HTML>
