@@ -128,23 +128,15 @@ if ($_SESSION&&$_REQUEST['start']==1) {
 	
 	if (!empty($_REQUEST['post'])){
     // Example Xero API Post - update invoice to Authorised status
-    $oauthObject->reset();
-    $result = $oauthObject->sign(array(
-        'path'      => $xro_settings['xero_url'].'/Invoices/',
-        'action'	=> 'POST',
-        'parameters'=> array(
-			'oauth_signature_method' => $xro_settings['signature_method']),
-        'signatures'=> $signatures));
-        
-    $xml = "<Invoices>
+     $xml = "<Invoices>
   <Invoice>
     <Type>ACCREC</Type>
     <Contact>
       <Name>Martin Hudson</Name>
     </Contact>
-    <Date>2011-10-01T00:00:00</Date>
-    <DueDate>2011-10-08T00:00:00</DueDate>
-    <InvoiceNumber>ORC1042</InvoiceNumber>
+    <Date>2011-10-10T00:00:00</Date>
+    <DueDate>2011-10-17T00:00:00</DueDate>
+    <InvoiceNumber>ORC1044</InvoiceNumber>
      <Status>AUTHORISED</Status>
     <LineAmountTypes>Exclusive</LineAmountTypes>
     <LineItems>
@@ -157,22 +149,31 @@ if ($_SESSION&&$_REQUEST['start']==1) {
     </LineItems>
   </Invoice>
 </Invoices>";
-	$fh  = fopen('php://memory', 'w+');
-	fwrite($fh, $xml);
-	rewind($fh);
+
+    $oauthObject->reset();
+    $result = $oauthObject->sign(array(
+        'path'      => $xro_settings['xero_url'].'/Invoices/',
+        'action'	=> 'POST',
+        'parameters'=> array(
+			'oauth_signature_method' => $xro_settings['signature_method'],
+			'xml' => $xml),
+        'signatures'=> $signatures));
+        
 	$ch = curl_init();
 	curl_setopt_array($ch, $options);
-	curl_setopt($ch, CURLOPT_PUT, true);
-	curl_setopt($ch, CURLOPT_INFILE, $fh);
-	curl_setopt($ch, CURLOPT_INFILESIZE, strlen($xml));
-    curl_setopt($ch, CURLOPT_URL, $result['signed_url']);
+	curl_setopt($ch, CURLOPT_POST, true);
+	$post_body = urlencode($xml);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, "xml=" . $post_body);
+
+	$url = $result['signed_url'];
+    curl_setopt($ch, CURLOPT_URL, $url);
 	$r = curl_exec($ch);
 	curl_close($ch);
 	
 	parse_str($r, $returned_items);		   
 	$oauth_problem = $returned_items['oauth_problem'];
 		if($oauth_problem){
-			session_destroy();
+			//session_destroy();
 		}
 	
 	echo 'CURL RESULT: <textarea cols="160" rows="40">' . $r . '</textarea><br/>';
