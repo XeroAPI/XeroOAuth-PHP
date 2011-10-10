@@ -135,7 +135,6 @@ class OAuthSimple {
             $this->setSignatureMethod();
         if (empty($this->_parameters['oauth_version']))
             $this->_parameters['oauth_version']="1.0";
-        //error_log('parameters: '.print_r($this,1));
         return $this;
     }
 
@@ -266,7 +265,7 @@ class OAuthSimple {
         return Array(
             'parameters' => $this->_parameters,
             'signature' => $this->_oauthEscape($this->_parameters['oauth_signature']),
-            'signed_url' => $this->_path . '?' . $this->_normalizedParameters(),
+            'signed_url' => $this->_path . '?' . $this->_normalizedParameters('true'),
             'header' => $this->getHeaderString(),
             'sbs'=> $this->sbs
             );
@@ -381,11 +380,15 @@ class OAuthSimple {
         return $this->_parameters['oauth_timestamp'] = time();
     }
 
-    function _normalizedParameters() {
+    function _normalizedParameters($filter='false') {
         $elements = array();
         $ra = 0;
         ksort($this->_parameters);
         foreach ( $this->_parameters as $paramName=>$paramValue) {
+      	 if($paramName=='xml'){
+      	 	if($filter=="true") 
+      	 		continue;
+       		}
             if (preg_match('/\w+_secret/',$paramName))
                 continue;
             if (is_array($paramValue))
@@ -396,6 +399,7 @@ class OAuthSimple {
                 continue;
             }
             array_push($elements,$this->_oauthEscape($paramName).'='.$this->_oauthEscape($paramValue));
+            
         }
         return join('&',$elements);
     }
