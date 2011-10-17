@@ -1,4 +1,5 @@
 <?php
+require 'OAuthSimple.php';
 
 // different app method defaults
 $xro_defaults = array( 'xero_url'     => 'https://api.xero.com/api.xro/2.0',
@@ -44,7 +45,7 @@ class XeroOAuth {
      *
      * @param app_type {string}       The Xero API application type: http://blog.xero.com/developer/api-overview/
 	 */
-    function XeroOAuth ($AppType = "Public"){
+    function XeroOAuth($AppType = "Public") {
         if (!empty($AppType)){
         	switch ($AppType) {
     			case "Public":
@@ -76,6 +77,21 @@ class XeroOAuth {
                      							'authorize_path'    => '/oauth/Authorize');  	
        
         return $this;
+    }
+    
+    
+    function MakeRequest($endpoint, $parameters, $action, $data, $app_type, $format="xml"){
+    	$oauthObject = new OAuthSimple();
+    	
+    	# Set some standard curl options....
+		$options[CURLOPT_VERBOSE] = 1;
+    	$options[CURLOPT_RETURNTRANSFER] = 1;
+    	$options[CURLOPT_SSL_VERIFYHOST] = 0;
+    	$options[CURLOPT_SSL_VERIFYPEER] = 0;
+    	$useragent = USER_AGENT;
+    	$useragent = isset($useragent) ? USER_AGENT : 'XeroOAuth-PHP';
+    	$options[CURLOPT_USERAGENT] = $useragent;
+    
     }
     
     }
