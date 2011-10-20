@@ -13,10 +13,9 @@ define('BASE_PATH',realpath('.'));
  * Define which app type you are using: 
  * Private - private app method
  * Public - standard public app method
- * Partner - partner app method
- * Partner_Mac - dev flavour of partner to get around Mac OS X issues with openssl (not for production)          
+ * Partner - partner app method      
  */      
-define("XRO_APP_TYPE",     "Partner_Mac");
+define("XRO_APP_TYPE",     "Partner");
 
 /**
  * Set your callback url or set 'oob' if none required
@@ -31,6 +30,7 @@ define("OAUTH_CALLBACK",     'http://localhost/XeroOAuth-PHP/example.php');
  * rsa_private_key: not needed for public applications
  * rsa_public_key: not needed for public applications
  */
+                     	 
 $signatures = array( 'consumer_key'     => 'MWSAN8S5AAFPMMNBV3DQIEWH4TM9FE',
               	      	 'shared_secret'    => 's',
                 	     'rsa_private_key'	=> BASE_PATH . '/certs/rq-partner-app-2-privatekey.pem',
