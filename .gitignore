@@ -10,3 +10,15 @@ certs/php-test-private-rq-privatekey.pem
 certs/entrust-private.pem
 
 certs/entrust-cert.pem
+
+certs/publickey14102011.cer
+
+certs/public_privatekey14102011.pfx
+
+certs/privatekey14102011.pem
+
+.gitignore
+
+.gitignore
+
+.gitignore
