@@ -4,7 +4,6 @@
  *
  * @author Ronan Quirke <network@xero.com>
  */
-require 'OAuthSimple.php';
 require 'XeroOAuth.php';
 require_once('_config.php');
 $oauthObject = new OAuthSimple();
@@ -21,7 +20,7 @@ $output = 'Authorizing...';
     	$options[CURLOPT_RETURNTRANSFER] = 1;
     	$options[CURLOPT_SSL_VERIFYHOST] = 0;
     	$options[CURLOPT_SSL_VERIFYPEER] = 0;
-    	$useragent = isset($useragent) ? USER_AGENT : 'XeroOAuth-PHP';
+    	$useragent = (isset($useragent)) ? (empty($useragent) ? 'XeroOAuth-PHP' : $useragent) : 'XeroOAuth-PHP'; 
     	$options[CURLOPT_USERAGENT] = $useragent;
 
                      
@@ -56,8 +55,8 @@ if ($_SESSION&&$_REQUEST['start']==1) {
     $oauthObject->reset();
     $result = $oauthObject->sign(array(
         'path'      => $xro_settings['xero_url'].'/'.$_REQUEST['endpoint'].'/',
-        //'parameters'=> array('Where' => 'Type%3d%3d%22BANK%22'),
         'parameters'=> array(
+        	'order' => urlencode($_REQUEST['order']),
 			'oauth_signature_method' => $xro_settings['signature_method']),
         'signatures'=> $signatures));
 	$ch = curl_init();
@@ -384,7 +383,7 @@ else {
 <a href="<?php echo $_SERVER['PHP_SELF'] . SID ?>?endpoint=Contacts&start=1">Contacts</a><br/>
 <a href="<?php echo $_SERVER['PHP_SELF'] . SID ?>?endpoint=Currencies&start=1">Currencies</a><br/>
 <a href="<?php echo $_SERVER['PHP_SELF'] . SID ?>?endpoint=TrackingCategories&start=1">TrackingCategories</a><br/>
-<a href="<?php echo $_SERVER['PHP_SELF'] . SID ?>?endpoint=Journals&start=1">Journals</a><br/>
+<a href="<?php echo $_SERVER['PHP_SELF'] . SID ?>?endpoint=Journals&start=1&order=JournalDate">Journals</a><br/>
 <a href="<?php echo $_SERVER['PHP_SELF'] . SID ?>?action=ChangeToken&start=1">Token Refresh</a><br/>
 <a href="<?php echo $_SERVER['PHP_SELF'] . SID ?>?put=put&start=1">PUT Invoice</a><br/>
 <a href="<?php echo $_SERVER['PHP_SELF'] . SID ?>?post=post&start=1">POST Invoice update</a><br/>
