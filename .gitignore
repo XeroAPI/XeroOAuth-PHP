@@ -22,3 +22,11 @@ certs/privatekey14102011.pem
 .gitignore
 
 .gitignore
+
+.settings/org.eclipse.php.core.prefs
+
+.project
+
+.buildpath
+
+.gitignore
