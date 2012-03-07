@@ -7,7 +7,7 @@
 /**
  * Define for file includes
  */
-define('BASE_PATH',realpath('.'));
+define('BASE_PATH',dirname(__FILE__));
 
 /**
  * Define which app type you are using: 
@@ -26,7 +26,7 @@ define("OAUTH_CALLBACK",     'http://localhost/XeroOAuth-PHP/example.php');
  * Application specific settings
  * Not all are required for given application types
  * consumer_key: required for all applications
- * shared_secret:  for partner applications, set to: s (cannot be blank)
+ * consumer_secret:  for partner applications, set to: s (cannot be blank)
  * rsa_private_key: not needed for public applications
  * rsa_public_key: not needed for public applications
  */
@@ -34,7 +34,9 @@ define("OAUTH_CALLBACK",     'http://localhost/XeroOAuth-PHP/example.php');
 $signatures = array( 'consumer_key'     => 'MWSAN8S5AAFPMMNBV3DQIEWH4TM9FE',
               	      	 'shared_secret'    => 's',
                 	     'rsa_private_key'	=> BASE_PATH . '/certs/rq-partner-app-2-privatekey.pem',
-                     	 'rsa_public_key'	=> BASE_PATH . '/certs/rq-partner-app-2-publickey.cer');
+                     	 'rsa_public_key'	=> BASE_PATH . '/certs/rq-partner-app-2-publickey.cer',
+						 // API version 
+                     	 'api_version'				=> '2.0',);
 
                      	 
 /**
@@ -44,9 +46,9 @@ $signatures = array( 'consumer_key'     => 'MWSAN8S5AAFPMMNBV3DQIEWH4TM9FE',
  * openssl pkcs12 -in entrust-client.p12 -clcerts -nokeys -out entrust-cert.pem
  * openssl pkcs12 -in entrust-client.p12 -nocerts -out entrust-private.pem <- you will be prompted to enter a password
  */   	
-$options[CURLOPT_SSLCERT] = BASE_PATH . '/certs/entrust-cert.pem';
-$options[CURLOPT_SSLKEYPASSWD] = '1234';
-$options[CURLOPT_SSLKEY] = BASE_PATH . '/certs/entrust-private.pem';
+$signatures['curl_ssl_cert'] = BASE_PATH . '/certs/entrust-cert.pem';
+$signatures['curl_ssl_password'] = '1234';
+$signatures['curl_ssl_key'] = BASE_PATH . '/certs/entrust-private.pem';
 
 /**
  * It is a good idea to set a user agent for the Xero API logs

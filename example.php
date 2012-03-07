@@ -28,7 +28,7 @@ switch (XRO_APP_TYPE) {
     case "Private":
         $xro_settings = $xro_private_defaults;
         $_GET['oauth_verifier'] = 1;
-       	$_COOKIE['oauth_token_secret'] =  $signatures['shared_secret'];
+       	$_COOKIE['oauth_token_secret'] =  $signatures['consumer_secret'];
        	$_GET['oauth_token'] =  $signatures['consumer_key'];
         break;
     case "Public":
@@ -224,7 +224,7 @@ if (!isset($_GET['oauth_verifier'])) {
             'oauth_callback'	=> OAUTH_CALLBACK,
             'oauth_signature_method' => $xro_settings['signature_method']),
         'signatures'=> $signatures));
-
+print_r($result);
     // The above object generates a simple URL that includes a signature, the 
     // needed parameters, and the web page that will handle our request.  I now
     // "load" that web page into a string variable.
