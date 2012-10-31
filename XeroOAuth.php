@@ -68,6 +68,7 @@ class XeroOAuth {
                      							'site'    => 'https://api-partner.network.xero.com',
                      							'authorize_url'    => 'https://api.xero.com/oauth/Authorize',
                      							'signature_method'    => 'RSA-SHA1');
+            	
                 break;
             	}
             }
@@ -306,11 +307,12 @@ class XeroOAuth {
     $code = curl_getinfo($c, CURLINFO_HTTP_CODE);
     $info = curl_getinfo($c);
     curl_close($c);
-echo 'CURL RESULT: ' . print_r($response) . '<br/>';
+    
     // store the response
     $this->response['code'] = $code;
     $this->response['response'] = $response;
     $this->response['info'] = $info;
+    $this->response['format'] = $this->format;
     return $code;
   }
     
@@ -367,10 +369,52 @@ echo 'CURL RESULT: ' . print_r($response) . '<br/>';
         	'order' => urlencode($_REQUEST['order']),
 			'oauth_signature_method' => $this->config['signature_method'])),
         'signatures'=> $this->config));
+   $this->format = $format;
 
-    return $this->curlit();
+    $curlRequest = $this->curlit();
+    if( $this->response['code']==401 && isset($this->config['session_handle'])){
+    	$params = array(
+    		'oauth_session_handle'	=> $this->config['session_handle'],
+            'oauth_token'	=> $this->config['access_token'],
+  			);
+    	 unset($this->config['access_token']);
+    	$this->request('GET', $this->url('AccessToken', ''), $params);
+    	exit;
+    } 
+    if( $this->response['code']==403){
+    	$errorMessage = "It looks like your client SSL cert issued by Xero is either invalid or has expired. See http://developer.xero.com/api-overview/http-response-codes/#403 for more";
+    	// default IIS page isn't informative, a little swap
+    	$this->response['response'] = $errorMessage;
+    	//exit;
+    }
+    return $curlRequest;
   }
   
+/**
+   * Convert the response into usable data
+   *
+   * @param string $response the raw response from the API
+   * @param string $format the format of the response
+   * @return string the concatenation of the host, API version and API method
+   */
+  function parseResponse($response, $format) {
+    
+    	if(isset($format)){
+  		switch ($format) {
+    			case "pdf":
+  					$theResponse = json_decode($response);  
+  					break;
+  				case "json":
+  					$theResponse = json_decode($response);  
+  				break;
+  				default:
+  					$theResponse = simplexml_load_string($response); 
+  				break;
+  		}
+  	}
+  
+  	}
+  	
  /**
    * Utility function to create the request URL in the requested format
    *
@@ -432,6 +476,39 @@ echo 'CURL RESULT: ' . print_r($response) . '<br/>';
       return "{$url}?{$qs}";
     else
       return $url;
+  }
+  
+  /*
+   *
+   * Run some basic checks on our config options etc to make sure all is ok
+   * 
+   */
+  
+  function diagnostics(){
+  	$testOutput = array();
+  		if($this->config['application_type']=='Partner'){
+  			if(!file_get_contents($this->config['curl_ssl_cert'])){
+  				$testOutput['ssl_cert_error'] = "Can't read the client SSL cert. You need one for partner API applications. http://developer.xero.com/partner-applications-certificates-explained/ \n";
+  			}else{
+  				$data = openssl_x509_parse(file_get_contents($this->config['curl_ssl_cert']));
+  				$validFrom = date('Y-m-d H:i:s', $data['validFrom_time_t']);
+				$validTo = date('Y-m-d H:i:s', $data['validTo_time_t']);
+				if(time() > $data['validTo_time_t']){
+					$testOutput['ssl_cert_error'] = "Client SSL cert expired - cert valid to "  . $validFrom . "\n";
+				} 
+  			} 
+  			
+			
+		if($this->config['application_type']=='Partner' || $this->config['application_type']=='Private'){
+			if(!file_get_contents($this->config['rsa_public_key'])) $testOutput['rsa_cert_error'] = "Can't read the self-signed SSL cert. Private and Partner API applications require a self-signed X509 cert http://developer.xero.com/api-overview/setup-an-application/#certs \n";
+			if(!file_get_contents($this->config['rsa_private_key'])) $testOutput['rsa_cert_error'] = "Can't read the self-signed cert key. Check your rsa_private_key config variable. Private and Partner API applications require a self-signed X509 cert http://developer.xero.com/api-overview/setup-an-application/#certs \n";
+		}
+  			
+  			
+  		}
+  
+		return 	$testOutput;	
+				
   }
     
     }
