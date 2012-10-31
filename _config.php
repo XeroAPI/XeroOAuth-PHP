@@ -43,7 +43,7 @@ $signatures = array( 'consumer_key'     => 'MWSAN8S5AAFPMMNBV3DQIEWH4TM9FE',
 
 if(XRO_APP_TYPE=="Private"||XRO_APP_TYPE=="Partner"){
 	$signatures['rsa_private_key']	= BASE_PATH . '/certs/rq-partner-app-2-privatekey.pem';
-	$signatures['rsa_public_key']	= BASE_PATH . '/certs/rq-partner-app-2-publickey.cer';
+	$signatures['rsa_public_key']	= BASE_PATH . '/certs/php-test-private-rq-publickey.cer';
 }
 
                      	 
@@ -55,9 +55,9 @@ if(XRO_APP_TYPE=="Private"||XRO_APP_TYPE=="Partner"){
  * openssl pkcs12 -in entrust-client.p12 -nocerts -out entrust-private.pem <- you will be prompted to enter a password
  */   	
 if(XRO_APP_TYPE=="Partner"){
-	$signatures['curl_ssl_cert'] = BASE_PATH . '/certs/entrust-cert.pem';
+	$signatures['curl_ssl_cert'] = BASE_PATH . '/certs/entrust-cert-2012.pem';
 	$signatures['curl_ssl_password'] = '1234';
-	$signatures['curl_ssl_key'] = BASE_PATH . '/certs/entrust-private.pem';
+	$signatures['curl_ssl_key'] = BASE_PATH . '/certs/entrust-private-2012.pem';
 }
 
 
