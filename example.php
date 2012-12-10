@@ -211,10 +211,7 @@ if (!isset($_GET['oauth_verifier'])) {
     // Step 1: Get a Request Token
     //
     // Get a temporary request token to facilitate the user authorization 
-    // in step 2. We make a request to the OAuthGetRequestToken endpoint,
-    // submitting the scope of the access we need (in this case, all the 
-    // user's calendars) and also tell Google where to go once the token
-    // authorization on their side is finished.
+    // in step 2. We make a request to the RequestToken endpoint
     //
     $result = $oauthObject->sign(array(
         'path'      => $xro_settings['site'].$xro_consumer_options['request_token_path'],
