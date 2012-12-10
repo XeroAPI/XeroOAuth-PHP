@@ -30,3 +30,7 @@ certs/privatekey14102011.pem
 .buildpath
 
 .gitignore
+
+*.pem
+
+*.p12
