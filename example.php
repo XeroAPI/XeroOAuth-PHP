@@ -184,7 +184,6 @@ if ($_SESSION&&$_REQUEST['start']==1) {
     	$result = $oauthObject->sign(array(
         	'path'      => $xro_settings['site'].$xro_consumer_options['access_token_path'],
         	'parameters'=> array(
-            'scope'         => $xro_settings['xero_url'],
             'oauth_session_handle'	=> $signatures['oauth_session_handle'],
             'oauth_token'	=> $signatures['oauth_token'],
             'oauth_signature_method' => $xro_settings['signature_method']),
@@ -220,7 +219,6 @@ if (!isset($_GET['oauth_verifier'])) {
     $result = $oauthObject->sign(array(
         'path'      => $xro_settings['site'].$xro_consumer_options['request_token_path'],
         'parameters'=> array(
-            'scope'         => $xro_settings['xero_url'],
             'oauth_callback'	=> OAUTH_CALLBACK,
             'oauth_signature_method' => $xro_settings['signature_method']),
         'signatures'=> $signatures));
