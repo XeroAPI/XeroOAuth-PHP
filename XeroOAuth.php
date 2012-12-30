@@ -1,33 +1,5 @@
 <?php
 require 'OAuthSimple.php';
-
-// different app method defaults
-$xro_defaults = array( 'xero_url'     => 'https://api.xero.com/api.xro/2.0',
-                     'site'    => 'https://api.xero.com',
-                     'authorize_url'    => 'https://api.xero.com/oauth/Authorize',
-                     'signature_method'    => 'HMAC-SHA1');
-                     
-$xro_private_defaults = array( 'xero_url'     => 'https://api.xero.com/api.xro/2.0',
-                     'site'    => 'https://api.xero.com',
-                     'authorize_url'    => 'https://api.xero.com/oauth/Authorize',
-                     'signature_method'    => 'RSA-SHA1');
-                     
-$xro_partner_defaults = array( 'xero_url'     => 'https://api-partner.network.xero.com/api.xro/2.0',
-                     'site'    => 'https://api-partner.network.xero.com',
-                     'authorize_url'    => 'https://api.xero.com/oauth/Authorize',
-                     'accesstoken_url'    => 'https://api-partner.xero.com/oauth/AccessToken',
-                     'signature_method'    => 'RSA-SHA1');
-                     
-$xro_partner_mac_defaults = array( 'xero_url'     => 'https://api-partner2.network.xero.com/api.xro/2.0',
-                     'site'    => 'https://api-partner2.network.xero.com',
-                     'authorize_url'    => 'https://api.xero.com/oauth/Authorize',
-                     'accesstoken_url'    => 'https://api-partner2.xero.com/oauth/AccessToken',
-                     'signature_method'    => 'RSA-SHA1');
-                     
-// standard Xero OAuth stuff
-$xro_consumer_options = array( 'request_token_path'    => '/oauth/RequestToken',
-                     'access_token_path'    => '/oauth/AccessToken',
-                     'authorize_path'    => '/oauth/Authorize');
                      
 /** Define a custom Exception for easy trap and detection
 */
@@ -250,14 +222,15 @@ class XeroOAuth {
       CURLINFO_HEADER_OUT    => TRUE,
       // ssl client cert options for partner apps
       CURLOPT_SSLCERT         => $this->config['curl_ssl_cert'],
-      CURLOPT_SSLKEYPASSWD    => $this->config['curl_ssl_password'],
+      CURLOPT_SSLKEYPASSWD   => $this->config['curl_ssl_password'],
       CURLOPT_SSLKEY          => $this->config['curl_ssl_key'],
+      
     ));
 
     if ($this->config['curl_proxyuserpwd'] !== false)
       curl_setopt($c, CURLOPT_PROXYUSERPWD, $this->config['curl_proxyuserpwd']);
 
-    if ($this->config['is_streaming']) {
+    if (isset($this->config['is_streaming'])) {
       // process the body
       $this->response['content-length'] = 0;
       curl_setopt($c, CURLOPT_TIMEOUT, 0);
@@ -289,7 +262,6 @@ class XeroOAuth {
       $this->headers['Content-Length'] = '';
     }
 
-    // CURL defaults to setting this to Expect: 100-Continue which Twitter rejects
     $this->headers['Expect'] = '';
 
     if ( ! empty($this->headers)) {
@@ -304,8 +276,16 @@ class XeroOAuth {
 
     // do it!
     $response = curl_exec($c);
-    $code = curl_getinfo($c, CURLINFO_HTTP_CODE);
+  	if($response === false)
+		{
+	    	$response = 'Curl error: ' . curl_error($c);
+	    	$code = 1;
+		}else{
+	    	$code = curl_getinfo($c, CURLINFO_HTTP_CODE);
+		}
+    
     $info = curl_getinfo($c);
+   
     curl_close($c);
     
     // store the response
@@ -324,7 +304,7 @@ class XeroOAuth {
     	$useragent = USER_AGENT;
     	$useragent = isset($useragent) ? USER_AGENT : 'XeroOAuth-PHP';
     	$options[CURLOPT_USERAGENT] = $useragent;
-    	  $options[CURLOPT_VERBOSE] = 1;
+    	$options[CURLOPT_VERBOSE] = 1;
     	$options[CURLOPT_RETURNTRANSFER] = 1;
     	$options[CURLOPT_SSL_VERIFYHOST] = 0;
     	$options[CURLOPT_SSL_VERIFYPEER] = 0;
@@ -362,16 +342,30 @@ class XeroOAuth {
 	$this->prepare_method($method);
     $this->config['multipart'] = $multipart;
 	$this->url = $url;
-   $oauthObject = new OAuthSimple();
-   $this->sign = $oauthObject->sign(array(
-        'path'      => $url,
-        'parameters'=> array_merge($params,array(
-        	'order' => urlencode($_REQUEST['order']),
-			'oauth_signature_method' => $this->config['signature_method'])),
-        'signatures'=> $this->config));
-   $this->format = $format;
-
-    $curlRequest = $this->curlit();
+	
+	if(!isset($_REQUEST['order'])) $_REQUEST['order'] = "";
+   		$oauthObject = new OAuthSimple();
+   		try
+  		{
+	   		$this->sign = $oauthObject->sign(array(
+	        	'path'      => $url,
+	        	'parameters'=> array_merge($params,array(
+	        	'order' => urlencode($_REQUEST['order']),
+				'oauth_signature_method' => $this->config['signature_method'])),
+	        	'signatures'=> $this->config));
+  		}
+  		
+		  catch(Exception $e)
+		  {
+		  $errorMessage = $e->getMessage();
+		  }
+   		
+   		$this->format = $format;
+		
+    	$curlRequest = $this->curlit();
+    	
+    	error_log('attempt at 369: '. date('Y-m-d H:i:s'));
+		error_log('response code: '. $this->response['response']);
     if( $this->response['code']==401 && isset($this->config['session_handle'])){
     	$params = array(
     		'oauth_session_handle'	=> $this->config['session_handle'],
@@ -382,12 +376,18 @@ class XeroOAuth {
     	exit;
     } 
     if( $this->response['code']==403){
-    	$errorMessage = "It looks like your client SSL cert issued by Xero is either invalid or has expired. See http://developer.xero.com/api-overview/http-response-codes/#403 for more";
+    	$errorMessage = "It looks like your Xero Entrust cert issued by Xero is either invalid or has expired. See http://developer.xero.com/api-overview/http-response-codes/#403 for more";
     	// default IIS page isn't informative, a little swap
     	$this->response['response'] = $errorMessage;
     	//exit;
     }
-    return $curlRequest;
+  if( $this->response['code']==0){
+    	$errorMessage = "It looks like your Xero Entrust cert issued by Xero is either invalid or has expired. See http://developer.xero.com/api-overview/http-response-codes/#403 for more";
+    	$this->response['response'] = $errorMessage;
+    }
+ 
+    
+    return $this->response;
   }
   
 /**
@@ -412,6 +412,7 @@ class XeroOAuth {
   				break;
   		}
   	}
+  	return $theResponse;
   
   	}
   	
@@ -517,7 +518,9 @@ class XeroOAuth {
 			}
 			if(!file_exists($this->config['rsa_private_key'])) $testOutput['rsa_cert_error'] = "Can't read the self-signed cert key. Check your rsa_private_key config variable. Private and Partner API applications require a self-signed X509 cert http://developer.xero.com/api-overview/setup-an-application/#certs \n";
 			if(file_exists($this->config['rsa_private_key'])){
-				if(!openssl_x509_check_private_key($this->config['rsa_public_key'], $this->config['rsa_private_key'])) $testOutput['rsa_cert_error'] = "Application certificate and key do not match \n";;
+				$cert_content = file_get_contents($this->config['rsa_public_key']);
+    			$priv_key_content = file_get_contents($this->config['rsa_private_key']);
+				if(!openssl_x509_check_private_key($cert_content, $priv_key_content)) $testOutput['rsa_cert_error'] = "Application certificate and key do not match \n";;
 			}
 			
 		}
