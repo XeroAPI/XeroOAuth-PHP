@@ -18,7 +18,7 @@ define('BASE_PATH',dirname(__FILE__));
 define("XRO_APP_TYPE",     "Partner");
 
 /**
- * It is a good idea to set a user agent for the Xero API logs - your application name is best
+ * Set a user agent string that matches your application name as set in the Xero developer centre
  */
 $useragent = "";
 
@@ -32,8 +32,8 @@ define("OAUTH_CALLBACK",     'http://localhost/XeroOAuth-PHP/example.php');
  * Not all are required for given application types
  * consumer_key: required for all applications
  * consumer_secret:  for partner applications, set to: s (cannot be blank)
- * rsa_private_key: not needed for public applications
- * rsa_public_key: not needed for public applications
+ * rsa_private_key: application certificate private key - not needed for public applications
+ * rsa_public_key:  application certificate public cert - not needed for public applications
  */
                      	 
 $signatures = array( 'consumer_key'     => 'MWSAN8S5AAFPMMNBV3DQIEWH4TM9FE',
@@ -42,8 +42,8 @@ $signatures = array( 'consumer_key'     => 'MWSAN8S5AAFPMMNBV3DQIEWH4TM9FE',
                      	 'api_version'				=> '2.0',);
 
 if(XRO_APP_TYPE=="Private"||XRO_APP_TYPE=="Partner"){
-	$signatures['rsa_private_key']	= BASE_PATH . '/certs/rq-partner-app-2-privatekey.pem';
-	$signatures['rsa_public_key']	= BASE_PATH . '/certs/php-test-private-rq-publickey.cer';
+	$signatures['rsa_private_key']	= BASE_PATH . '/certs/privatekey.pem';
+	$signatures['rsa_public_key']	= BASE_PATH . '/certs/publickey.cer';
 }
 
                      	 
@@ -55,9 +55,9 @@ if(XRO_APP_TYPE=="Private"||XRO_APP_TYPE=="Partner"){
  * openssl pkcs12 -in entrust-client.p12 -nocerts -out entrust-private.pem <- you will be prompted to enter a password
  */   	
 if(XRO_APP_TYPE=="Partner"){
-	$signatures['curl_ssl_cert'] = BASE_PATH . '/certs/entrust-cert-2012.pem';
+	$signatures['curl_ssl_cert'] = BASE_PATH . '/certs/entrust-cert-RQ3.pem';
 	$signatures['curl_ssl_password'] = '1234';
-	$signatures['curl_ssl_key'] = BASE_PATH . '/certs/entrust-private-2012.pem';
+	$signatures['curl_ssl_key'] = BASE_PATH . '/certs/entrust-private-RQ3.pem';
 }
 
 
