@@ -39,7 +39,7 @@ define("OAUTH_CALLBACK",     'http://localhost/XeroOAuth-PHP/example.php');
 $signatures = array( 'consumer_key'     => 'MWSAN8S5AAFPMMNBV3DQIEWH4TM9FE',
               	      	 'shared_secret'    => 's',
 						 	// API versions 
-                     	 	'xro_version'				=> '2.0',
+                     	 	'core_version'					=> '2.0',
 							'payroll_version'				=> '1.0');
 
 if(XRO_APP_TYPE=="Private"||XRO_APP_TYPE=="Partner"){

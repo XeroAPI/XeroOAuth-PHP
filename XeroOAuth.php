@@ -26,17 +26,17 @@ class XeroOAuth {
         if (!empty($config['application_type'])){
         	switch ($config['application_type']) {
     			case "Public":
-            	$this->_xero_defaults =  array( 'xero_url'     => 'https://api.xero.com/api.xro',
+            	$this->_xero_defaults =  array( 'xero_url'     => 'https://api.xero.com/',
                      							'site'    => 'https://api.xero.com',
                      							'authorize_url'    => 'https://api.xero.com/oauth/Authorize',
                      							'signature_method'    => 'HMAC-SHA1');
             	case "Private":
-            	$this->_xero_defaults = array(	'xero_url'     => 'https://api.xero.com/api.xro',
+            	$this->_xero_defaults = array(	'xero_url'     => 'https://api.xero.com/',
                      							'site'    => 'https://api.xero.com',
                      							'authorize_url'    => 'https://api.xero.com/oauth/Authorize',
                      							'signature_method'    => 'RSA-SHA1');
             	case "Partner": 
-            	$this->_xero_defaults = array( 	'xero_url'     => 'https://api-partner.network.xero.com/api.xro',
+            	$this->_xero_defaults = array( 	'xero_url'     => 'https://api-partner.network.xero.com/',
                      							'site'    => 'https://api-partner.network.xero.com',
                      							'authorize_url'    => 'https://api.xero.com/oauth/Authorize',
                      							'signature_method'    => 'RSA-SHA1');
@@ -364,26 +364,24 @@ class XeroOAuth {
 		
     	$curlRequest = $this->curlit();
     	
-    	error_log('attempt at 369: '. date('Y-m-d H:i:s'));
-		error_log('response code: '. $this->response['response']);
-    if( $this->response['code']==401 && isset($this->config['session_handle'])){
-    	$params = array(
-    		'oauth_session_handle'	=> $this->config['session_handle'],
-            'oauth_token'	=> $this->config['access_token'],
-  			);
-    	 unset($this->config['access_token']);
-    	$this->request('GET', $this->url('AccessToken', ''), $params);
-    	exit;
+    if( $this->response['code']==401 && isset($this->config['session_handle']) ){
+    	if((strpos($this->response['response'], "oauth_problem=token_expired")!== false)){
+    		$this->response['helper'] = "TokenExpired";
+    	}else{
+    		$this->response['helper'] = "TokenFatal";
+    	}
+    	
     } 
     if( $this->response['code']==403){
     	$errorMessage = "It looks like your Xero Entrust cert issued by Xero is either invalid or has expired. See http://developer.xero.com/api-overview/http-response-codes/#403 for more";
     	// default IIS page isn't informative, a little swap
     	$this->response['response'] = $errorMessage;
-    	//exit;
+    	$this->response['helper'] = "SetupIssue";
     }
   if( $this->response['code']==0){
     	$errorMessage = "It looks like your Xero Entrust cert issued by Xero is either invalid or has expired. See http://developer.xero.com/api-overview/http-response-codes/#403 for more";
     	$this->response['response'] = $errorMessage;
+    	$this->response['helper'] = "SetupIssue";
     }
  
     
@@ -422,7 +420,7 @@ class XeroOAuth {
    * @param string $request the API method without extension
    * @return string the concatenation of the host, API version and API method
    */
-  function url($request) {
+  function url($request, $api="core") {
     
   	if($request=="RequestToken"){
   		$this->config['host'] = $this->config['site'] . '/oauth/';
@@ -432,8 +430,17 @@ class XeroOAuth {
   	}elseif($request=="AccessToken"){
   		$this->config['host'] = $this->config['site'] . '/oauth/';
   	}else{
-  		if (isset($this->config['xro_version']))
-      	$this->config['host'] = $this->config['xero_url'] . '/' . $this->config['xro_version'] . '/';
+  		if(isset($api)){
+  			if($api=="core"){
+  				$api_stem = "api.xro";
+  				$api_version = $this->config['core_version'];
+  			} 
+  			if($api=="payroll"){
+  				$api_stem = "payroll.xro";
+  				$api_version = $this->config['payroll_version'];
+  			} 
+  		}
+      	$this->config['host'] = $this->config['xero_url'] . $api_stem . '/' . $api_version  . '/';
   	}
     
       
