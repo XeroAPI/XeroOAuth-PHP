@@ -1,5 +1,4 @@
 # Setup
-=======
 To get setup, you will need to modify the values in the _config.php file to your own requirements and application settings
 Special options for Partner applications - should be commented out for non-partner applications
 
