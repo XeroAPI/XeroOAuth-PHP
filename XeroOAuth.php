@@ -30,17 +30,18 @@ class XeroOAuth {
                      							'site'    => 'https://api.xero.com',
                      							'authorize_url'    => 'https://api.xero.com/oauth/Authorize',
                      							'signature_method'    => 'HMAC-SHA1');
+            	break;
             	case "Private":
             	$this->_xero_defaults = array(	'xero_url'     => 'https://api.xero.com/',
                      							'site'    => 'https://api.xero.com',
                      							'authorize_url'    => 'https://api.xero.com/oauth/Authorize',
                      							'signature_method'    => 'RSA-SHA1');
+            	break;
             	case "Partner": 
             	$this->_xero_defaults = array( 	'xero_url'     => 'https://api-partner.network.xero.com/',
                      							'site'    => 'https://api-partner.network.xero.com',
                      							'authorize_url'    => 'https://api.xero.com/oauth/Authorize',
                      							'signature_method'    => 'RSA-SHA1');
-            	
                 break;
             	}
             }
@@ -220,12 +221,16 @@ class XeroOAuth {
       CURLOPT_HEADERFUNCTION => array($this, 'curlHeader'),
       CURLOPT_HEADER         => FALSE,
       CURLINFO_HEADER_OUT    => TRUE,
-      // ssl client cert options for partner apps
-      CURLOPT_SSLCERT         => $this->config['curl_ssl_cert'],
-      CURLOPT_SSLKEYPASSWD   => $this->config['curl_ssl_password'],
-      CURLOPT_SSLKEY          => $this->config['curl_ssl_key'],
-      
     ));
+    
+    if($this->config['application_type']=="Partner"){
+	    curl_setopt_array($c, array(
+	    	// ssl client cert options for partner apps
+	      	CURLOPT_SSLCERT         => $this->config['curl_ssl_cert'],
+	      	CURLOPT_SSLKEYPASSWD   	=> $this->config['curl_ssl_password'],
+	      	CURLOPT_SSLKEY          => $this->config['curl_ssl_key'],
+	    ));
+    }
 
     if ($this->config['curl_proxyuserpwd'] !== false)
       curl_setopt($c, CURLOPT_PROXYUSERPWD, $this->config['curl_proxyuserpwd']);
@@ -242,6 +247,15 @@ class XeroOAuth {
         break;
       case 'POST':
         curl_setopt($c, CURLOPT_POST, TRUE);
+        break;
+        case 'PUT':
+        	$fh  = fopen('php://memory', 'w+');
+			fwrite($fh, $this->xml);
+			rewind($fh);
+			curl_setopt($c, CURLOPT_PUT, true);
+			curl_setopt($c, CURLOPT_INFILE, $fh);
+			curl_setopt($c, CURLOPT_INFILESIZE, strlen($this->xml));
+			error_log("XML: " . $this->xml);
         break;
       default:
         curl_setopt($c, CURLOPT_CUSTOMREQUEST, $this->method);
@@ -323,7 +337,7 @@ class XeroOAuth {
    * @param string $format the format of the response. Default json. Set to an empty string to exclude the format
 
    */
-  function request($method, $url, $params=array(), $useauth=true, $multipart=false, $format='xml') {
+  function request($method, $url, $params=array(), $xml, $useauth=true, $multipart=false, $format='xml') {
   	
   	  	if(isset($format)){
   		switch ($format) {
@@ -339,6 +353,7 @@ class XeroOAuth {
   		}
   	}
   	
+  	$this->xml = $xml;
 	$this->prepare_method($method);
     $this->config['multipart'] = $multipart;
 	$this->url = $url;
@@ -359,11 +374,10 @@ class XeroOAuth {
 		  {
 		  $errorMessage = $e->getMessage();
 		  }
-   		
    		$this->format = $format;
 		
     	$curlRequest = $this->curlit();
-    	
+    	error_log("Response: ".$this->response['response'], 0);
     if( $this->response['code']==401 && isset($this->config['session_handle']) ){
     	if((strpos($this->response['response'], "oauth_problem=token_expired")!== false)){
     		$this->response['helper'] = "TokenExpired";
@@ -452,6 +466,28 @@ class XeroOAuth {
     ));
   }
   
+  /**
+   * Refreshes the access token for partner API type applications
+   *
+   * @param string $accessToken the current access token for the session
+   * @param string $sessionHandle the current session handle for the session
+   * @return array response array from request
+   */
+	function refreshToken($accessToken, $sessionHandle) {
+  		$code = $this->request('GET', $this->url('AccessToken', ''), 
+  				array('oauth_token' => $accessToken,  'oauth_session_handle' => $sessionHandle)
+  				);
+			if ($this->response['code'] == 200) {
+  	
+		    $response = $this->extract_params($this->response['response']);
+		    
+		    return $response;
+  		}else{
+  			$this->response['helper'] = "TokenFatal";
+  			return $this->response;
+  		}
+	}
+	
   /**
    * Returns the current URL. This is instead of PHP_SELF which is unsafe
    *
