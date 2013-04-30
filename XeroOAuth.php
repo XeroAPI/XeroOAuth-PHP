@@ -364,6 +364,7 @@ class XeroOAuth {
   		{
 	   		$this->sign = $oauthObject->sign(array(
 	        	'path'      => $url,
+	   			'action'	=> $method,
 	        	'parameters'=> array_merge($params,array(
 	        	'order' => urlencode($_REQUEST['order']),
 				'oauth_signature_method' => $this->config['signature_method'])),
