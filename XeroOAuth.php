@@ -255,7 +255,7 @@ class XeroOAuth {
 			curl_setopt($c, CURLOPT_PUT, true);
 			curl_setopt($c, CURLOPT_INFILE, $fh);
 			curl_setopt($c, CURLOPT_INFILESIZE, strlen($this->xml));
-			error_log("XML: " . $this->xml);
+			
         break;
       default:
         curl_setopt($c, CURLOPT_CUSTOMREQUEST, $this->method);
@@ -284,7 +284,7 @@ class XeroOAuth {
       }
       curl_setopt($c, CURLOPT_HTTPHEADER, $headers);
     }
-
+error_log("HEADERS: " .  $headers[0]);
     if (isset($this->config['prevent_request']) && false == $this->config['prevent_request'])
       return;
 
@@ -337,23 +337,24 @@ class XeroOAuth {
    * @param string $format the format of the response. Default json. Set to an empty string to exclude the format
 
    */
-  function request($method, $url, $params=array(), $xml, $useauth=true, $multipart=false, $format='xml') {
+  function request($method, $url, $params=array(), $xml="", $useauth=true, $multipart=false, $format='xml') {
   	
   	  	if(isset($format)){
   		switch ($format) {
     			case "pdf":
-  					$this->headers['Accept'] = 'Accept: application/pdf'; 
+  					$this->headers['Accept'] = 'application/pdf'; 
   					break;
   				case "json":
-  					$this->headers['Accept'] = 'Accept: application/json'; 
+  					$this->headers['Accept'] = 'application/json'; 
   				break;
+  				case "xml":
   				default:
-  					$this->headers['Accept'] = 'Accept: application/xml'; 
+  					$this->headers['Accept'] = 'application/xml'; 
   				break;
   		}
   	}
   	
-  	$this->xml = $xml;
+  	if($xml!=="") $this->xml = $xml;
 	$this->prepare_method($method);
     $this->config['multipart'] = $multipart;
 	$this->url = $url;
@@ -373,12 +374,12 @@ class XeroOAuth {
   		
 		  catch(Exception $e)
 		  {
-		  $errorMessage = $e->getMessage();
+		  		  $errorMessage = $e->getMessage();
 		  }
    		$this->format = $format;
 		
     	$curlRequest = $this->curlit();
-    	error_log("Response: ".$this->response['response'], 0);
+    	
     if( $this->response['code']==401 && isset($this->config['session_handle']) ){
     	if((strpos($this->response['response'], "oauth_problem=token_expired")!== false)){
     		$this->response['helper'] = "TokenExpired";
