@@ -272,6 +272,7 @@ class XeroOAuth
                 curl_setopt($c, CURLOPT_POST, TRUE);
                 $post_body = urlencode($this->xml);
         		curl_setopt($c, CURLOPT_POSTFIELDS, $post_body);
+        		$this->request_params['xml'] = $this->xml;
                 
                 break;
             case 'PUT':
@@ -385,6 +386,9 @@ class XeroOAuth
         
         if ($xml !== "")
             $this->xml = $xml;
+            
+        if($method == "POST")
+        	$params['xml'] = $xml;
         
         $this->prepare_method($method);
         $this->config['multipart'] = $multipart;
