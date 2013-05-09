@@ -270,6 +270,8 @@ class XeroOAuth
                 break;
             case 'POST':
                 curl_setopt($c, CURLOPT_POST, TRUE);
+                $post_body = urlencode($this->xml);
+        		curl_setopt($c, CURLOPT_POSTFIELDS, $post_body);
                 
                 break;
             case 'PUT':
@@ -312,9 +314,6 @@ class XeroOAuth
         if (isset($this->config['prevent_request']) && false == $this->config['prevent_request'])
             return;
         
-        $post_body = urlencode($this->xml);
-        curl_setopt($c, CURLOPT_POSTFIELDS, $post_body);
-        error_log("BODY: " . $post_body);
         
         // do it!
         $response = curl_exec($c);
