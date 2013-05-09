@@ -8,7 +8,7 @@ Intro
 XeroOAuth-PHP is a sample library for use with the Xero API (<http://developer.xero.com>). The Xero API uses OAuth 1.0a, but we would not recommend using this library for other OAuth 1.0a APIs as
 the Xero API has one of the more advanced implementations (RSA-SHA1, client ssl certs etc) and thus has many configuration options not typically used in other APIs.
 
-This library is designed to get a developer up and running quickly with the OAuth authentication layer, but there will be some customisation of it's implementation required before it can be used in a
+This library is designed to get a developer up and running quickly with the OAuth authentication layer, but there will be some customisation of its implementation required before it can be used in a
 production environment.
 
 ## Setup
