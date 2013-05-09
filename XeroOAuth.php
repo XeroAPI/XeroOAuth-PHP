@@ -360,7 +360,7 @@ class XeroOAuth
      *
      * @param string $method the HTTP method being used. e.g. POST, GET, HEAD etc
      * @param string $url the request URL without query string parameters
-     * @param array $params the request parameters as an array of key=value pairs
+     * @param array  $params the request parameters as an array of key=value pairs
      * @param string $format the format of the response. Default json. Set to an empty string to exclude the format
      
      */

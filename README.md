@@ -15,6 +15,50 @@ production environment.
 To get setup, you will need to modify the values in the _config.php file to your own requirements and application settings
 Special options for Partner applications - should be commented out for non-partner applications
 
+## Usage
+
+There are a number of functions you will find useful.
+
+#### Make a request
+The request function lies at the core of any communication with the API. There are a number of types of requests you may wish to make, all handled by the request() function.
+
+    request($method, $url, $parameters, $xml, $format)
+
+###### Parameters
+* Method: the API method to be used (GET, PUT, POST)
+* URL: the URL of the API endpoint. This is handled by a special function (see below)
+* Parameters: an associative array of parameters such as where, order by etc (see <http://developer.xero.com/api-overview/http-requests-and-responses/>)
+* XML: request data (for PUT and POST operations)
+* Format: response format (currently xml, json & pdf are supported). Note that PDF is not supported for all endpoints
+
+#### Generate a URL
+For partner API applications where the 30 minute access tokens can be programatically refreshed via the API, you can use the refreshToken function:
+
+    url($endpoint, $api)
+
+###### Parameters
+* Endpoint: the endpoint you wish to work with. Note there are OAuth endpoints such as 'RequestToken' and 'AccessToken' in addition to various API endpoints such as Invoices, Contacts etc. When specifying a resource, such as Invoices/$GUID, you can construct the request by appending the GUID to the base URL.
+* API: there are two APIs: core (core accounting API) and payroll (payroll application API). Default is core.
+
+#### Parse the response
+Once you get data back, you can pass it through the parseResponse function to turn it into something usable.
+
+    parseResponse($response, $format)
+
+###### Parameters
+* Response: the raw API response to be parsed
+* Format: xml pdf and json are supported, but you cannot use this function to parse an XML API response as JSON - must correspond to the requested response format.
+
+
+#### Refresh an access token
+For partner API applications where the 30 minute access tokens can be programatically refreshed via the API, you can use the refreshToken function:
+
+    refreshToken('the access token', 'the session handle')
+
+###### Parameters
+* Access token: the current access token
+* Session handle: the session identifier handle
+
 ## Debug
 If you append: ?debug=1 to example.php so you have /example.php?debug=1
 - this will output some debug information
