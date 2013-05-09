@@ -361,13 +361,13 @@ class XeroOAuth
      * @param string $method the HTTP method being used. e.g. POST, GET, HEAD etc
      * @param string $url the request URL without query string parameters
      * @param array $params the request parameters as an array of key=value pairs
-     * @param string $useauth whether to use authentication when making the request. Default true.
-     * @param string $multipart whether this request contains multipart data. Default false
      * @param string $format the format of the response. Default json. Set to an empty string to exclude the format
      
      */
-    function request($method, $url, $params = array(), $xml = "", $useauth = true, $multipart = false, $format = 'xml')
+    function request($method, $url, $params = array(), $xml = "", $format = 'xml')
     {
+    	// removed these as function parameters for now
+    	$useauth = true; $multipart = false;
         
         if (isset($format)) {
             switch ($format) {
