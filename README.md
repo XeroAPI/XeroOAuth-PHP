@@ -17,7 +17,7 @@ Special options for Partner applications - should be commented out for non-partn
 
 ## Usage
 
-There are a number of functions you will find useful.
+There are a number of functions used when interacting with Xero:
 
 #### Make a request
 The request function lies at the core of any communication with the API. There are a number of types of requests you may wish to make, all handled by the request() function.
@@ -48,6 +48,15 @@ Once you get data back, you can pass it through the parseResponse function to tu
 ###### Parameters
 * Response: the raw API response to be parsed
 * Format: xml pdf and json are supported, but you cannot use this function to parse an XML API response as JSON - must correspond to the requested response format.
+
+#### Authorise
+For public and partner API type applications using the 3-legged OAuth process, we need to redirect the user to Xero to authorise the API connection. To do so, redirect the user to a url generated with a call like this:
+
+    url("Authorize", '') . "?oauth_token=".$oauth_token."&scope=" . $scope;
+
+###### Appendages
+* oauth_token: this is a request token generated in a prior RequestToken call
+* scope: the Payroll API is a permissioned API and required a comma separated list of endpoints the application is requesting access to e.g. $scope = 'payroll.payrollcalendars,payroll.superfunds,payroll.payruns,payroll.payslip,payroll.employees';
 
 
 #### Refresh an access token
