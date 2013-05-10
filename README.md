@@ -96,3 +96,15 @@ Understanding the type of message you are getting from the API could be useful. 
 * **TokenExpired:**  This means that the access token has expired. If you are using a partner API type application, you can renew it automatically, or if using a public application, prompt the user to re-authenticate
 * **TokenFatal:** In this scenario, a token is in a state that it cannot be renewed, and the user will need to re-authenticate
 * **SetupIssue:** There is an issue within the setup/configuration of the connection - check the diagnostics function
+
+
+## License & Credits
+
+This software is published under the [MIT License](http://en.wikipedia.org/wiki/MIT_License).
+
+###### OAuthSimple
+OAuthsimple.php contains minor adaptations from the OAuthSimple PHP class by [United Heroes](http://unitedheroes.net/OAuthSimple/).
+
+###### tmhOAuth
+XeroOAuth class is based on code and structure derived from the [tmhOAuth](https://github.com/themattharris/tmhOAuth) library.
+
