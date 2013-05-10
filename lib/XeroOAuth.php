@@ -1,5 +1,5 @@
 <?php
-require 'OAuthSimple.php';
+require 'lib/OAuthSimple.php';
 
 /** Define a custom Exception for easy trap and detection
  */
@@ -568,6 +568,7 @@ class XeroOAuth
     
     function diagnostics()
     {
+    	
         $testOutput = array();
         if ($this->config['application_type'] == 'Partner') {
             if (!file_get_contents($this->config['curl_ssl_cert'])) {
@@ -583,9 +584,10 @@ class XeroOAuth
                     $testOutput['ssl_cert_error'] = "Xero Entrust cert expired - cert valid to " . $validFrom . "\n";
                 }
             }
-            
-            
+        }
+        
             if ($this->config['application_type'] == 'Partner' || $this->config['application_type'] == 'Private') {
+            	
                 if (!file_exists($this->config['rsa_public_key']))
                     $testOutput['rsa_cert_error'] = "Can't read the self-signed SSL cert. Private and Partner API applications require a self-signed X509 cert http://developer.xero.com/api-overview/setup-an-application/#certs \n";
                 if (file_exists($this->config['rsa_public_key'])) {
@@ -612,7 +614,7 @@ class XeroOAuth
             }
             
             
-        }
+        
         
         return $testOutput;
         
