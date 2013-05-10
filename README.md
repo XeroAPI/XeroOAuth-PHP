@@ -69,11 +69,25 @@ For partner API applications where the 30 minute access tokens can be programati
 * Session handle: the session identifier handle
 
 ## Debug
-If you append: ?debug=1 to example.php so you have /example.php?debug=1
-- this will output some debug information
-- this will include a "CURL ERROR:" line
-- under this, if you are getting any errors it should provide this in the returned oauth_problem and oauth_problem_advice parameters - the error messages should be quite self explanatory
-- if there are no errors, you should just see oauth_token and oauth_token_secret parameters returned, indicating all is ok
+
+###### Setup Diagnostics
+As you are getting set up, you may run into a few configuration issues, particularly with some of the more advanced application types such as partner.
+
+To make sure your configuration is correct, you can run a diagnostics function:
+
+    diagnostics();
+
+This returns an array of error messages (if there are any). These are in human readable form so should be enough to put you on the right track. If not, check the Xero developer centre and forum for more detail.
+
+It would probably be a bad idea to run this in your production code as the errors returned ones only a developer can resolve, not the end user.
+
+###### Runtime errors
+
+There are many reasons why an error may be encountered: data validation, token issues, authorisation revocation etc. It is important to inspect not just the HTTP response code, but also the associated error string.
+
+A very basic error output function is included in the sample code, which outputs all available information related to an error. It would need to be substantially tidied up before the results could be surfaced in a production environment.
+
+    outputError($object);
 
 
 ## Response Helpers
