@@ -108,3 +108,8 @@ OAuthsimple.php contains minor adaptations from the OAuthSimple PHP class by [Un
 ###### tmhOAuth
 XeroOAuth class is based on code and structure derived from the [tmhOAuth](https://github.com/themattharris/tmhOAuth) library.
 
+## Major change history
+
+#### 0.1 - 10th May 2013
+
+Initial release candidate prepared and released to 'refactor' branch.
