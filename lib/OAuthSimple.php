@@ -427,25 +427,30 @@ class OAuthSimple {
         	case 'RSA-SHA1':
         	
         		// Fetch the public key  
-                $publickey = openssl_get_publickey($this->_readFile($this->_secrets['public_key']));
+                if($publickey = openssl_get_publickey($this->_readFile($this->_secrets['public_key']))){
+                	
+                }else{
+                	throw new OAuthSimpleException('Cannot access public key for signing');
+                }
                 
                 // Fetch the private key 
-                $privatekeyid = openssl_get_privatekey($this->_readFile($this->_secrets['private_key']));
-                
-                // Sign using the key
-                
-                $this->sbs = $this->_oauthEscape($this->_action).'&'.$this->_oauthEscape($this->_path).'&'.$this->_oauthEscape($this->_normalizedParameters());
-                error_log('SBS: '.$this->sbs);
-                
-               $ok = openssl_sign($this->sbs, $signature, $privatekeyid);
-               error_log('SIG: '.$signature);
+                if($privatekeyid = openssl_pkey_get_private($this->_readFile($this->_secrets['private_key'])))
+                {
+                	// Sign using the key
+                 	$this->sbs = $this->_oauthEscape($this->_action).'&'.$this->_oauthEscape($this->_path).'&'.$this->_oauthEscape($this->_normalizedParameters());
+                	
+               		$ok = openssl_sign($this->sbs, $signature, $privatekeyid);
                
-                  // Release the key resource
-				openssl_free_key($privatekeyid);
+                  	// Release the key resource
+					openssl_free_key($privatekeyid);
            
-               return base64_encode($signature);
-               //return base64_encode(hash_hmac('sha1',$this->sbs,$secretKey,true));
+               		return base64_encode($signature);
                 
+                }else{
+                	throw new OAuthSimpleException('Cannot access private key for signing');
+                }
+                
+               
             case 'PLAINTEXT':
                 return urlencode($secretKey);
 

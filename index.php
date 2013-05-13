@@ -5,7 +5,9 @@
     <body>
         <h1>Howdy</h1>
         <ol>
-            <li>A sample script is in <a href="example.php">example.php</a>
+            <li>A sample script for Private API applications <a href="private.php">private.php</a>
+            </li>
+            <li>A sample script for Partner API applications <a href="partner.php">partner.php</a>
             </li>
         </ol>
       
