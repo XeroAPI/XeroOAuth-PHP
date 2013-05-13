@@ -116,6 +116,11 @@ XeroOAuth class is based on code and structure derived from the [tmhOAuth](https
 
 ## Major change history
 
+#### 0.2 - 13th May 2013
+
+Merged to master, added more tests and improved security handling for partner API apps.
+
+
 #### 0.1 - 10th May 2013
 
 Initial release candidate prepared and released to 'refactor' branch.
