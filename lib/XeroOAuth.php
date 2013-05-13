@@ -66,9 +66,10 @@ class XeroOAuth
             'curl_timeout' => 10,
             // for security you may want to set this to TRUE. If you do you need
             // to install the servers certificate in your local certificate store.
-            'curl_ssl_verifypeer' => false,
+            'curl_ssl_verifypeer' => true,
+        	'curl_cainfo' => 'certs/ca-bundle.crt',
             'curl_followlocation' => false, // whether to follow redirects or not
-            'curl_ssl_verifyhost' => false,
+            'curl_ssl_verifyhost' => true,
             // support for proxy servers
             'curl_proxy' => false, // really you don't want to use this if you are using streaming
             'curl_proxyuserpwd' => false, // format username:password for proxy, if required
@@ -228,6 +229,7 @@ class XeroOAuth
             CURLOPT_TIMEOUT => $this->config['curl_timeout'],
             CURLOPT_RETURNTRANSFER => TRUE,
             CURLOPT_SSL_VERIFYPEER => $this->config['curl_ssl_verifypeer'],
+            CURLOPT_CAINFO => $this->config['curl_cainfo'],
             CURLOPT_SSL_VERIFYHOST => $this->config['curl_ssl_verifyhost'],
             CURLOPT_FOLLOWLOCATION => $this->config['curl_followlocation'],
             CURLOPT_PROXY => $this->config['curl_proxy'],
