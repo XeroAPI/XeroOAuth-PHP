@@ -1,12 +1,24 @@
 
+<<<<<<< HEAD
+=======
 .gitignore
 
-.settings/org.eclipse.php.core.prefs
+.settings
 
 .project
 
 .buildpath
 
+>>>>>>> refactor
+.gitignore
+
+*.pem
+
+*.p12
+
+*.cer
+
+<<<<<<< HEAD
 .gitignore
 
 *.pem
@@ -14,3 +26,6 @@
 *.p12
 *.cer
 *.pfx
+=======
+*.pfx
+>>>>>>> refactor
