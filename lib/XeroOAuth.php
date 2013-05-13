@@ -68,7 +68,7 @@ class XeroOAuth
             // to install the servers certificate in your local certificate store.
             'curl_ssl_verifypeer' => true,
         	// include ca-bundle.crt from http://curl.haxx.se/ca/cacert.pem
-        	'curl_cainfo' => 'certs/ca-bundle.crt',
+        	'curl_cainfo' => BASE_PATH . '/certs/ca-bundle.crt',
             'curl_followlocation' => false, // whether to follow redirects or not
             'curl_ssl_verifyhost' => true,
             // support for proxy servers

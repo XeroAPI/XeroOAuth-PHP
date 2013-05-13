@@ -5,7 +5,8 @@
  */
 
 /**
- * Define for file includes
+ * Define for file includes. The certs directory is best stored out of web root so moving the directory
+ * and updating the reference to BASE_PATH is the best way to ensure things keep working
  */
 define('BASE_PATH',dirname(__FILE__));
 
