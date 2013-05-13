@@ -332,7 +332,6 @@ class XeroOAuth
         // store the response
         $this->response['code']     = $code;
         $this->response['response'] = $response;
-        error_log("RESPONSE: " . $response);
         $this->response['info']   = $info;
         $this->response['format'] = $this->format;
         return $code;
@@ -393,7 +392,6 @@ class XeroOAuth
         $this->prepare_method($method);
         $this->config['multipart'] = $multipart;
         $this->url                 = $url;
-        error_log("URL: " . $url);
         if (!isset($_REQUEST['order']))
             $_REQUEST['order'] = "";
         $oauthObject = new OAuthSimple();
