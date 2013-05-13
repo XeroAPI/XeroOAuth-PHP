@@ -19,10 +19,10 @@ if ( isset($_REQUEST['wipe'])) {
 	
 	$XeroOAuth->config['access_token']  = $oauthSession['oauth_token'];
   	$XeroOAuth->config['access_token_secret'] = $oauthSession['oauth_token_secret'];
-  	$XeroOAuth->config['session_handle'] = $oauthSession['session_handle'];
+  	$XeroOAuth->config['session_handle'] = $oauthSession['oauth_session_handle'];
   
   
-if($_REQUEST['accounts']){
+if(isset($_REQUEST['accounts'])){
   $response = $XeroOAuth->request('GET', $XeroOAuth->url('Accounts', 'core'), array('Where' => $_REQUEST['where']));
   if ($XeroOAuth->response['code'] == 200) {
     $accounts = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
@@ -33,7 +33,7 @@ if($_REQUEST['accounts']){
   }
   }
   
-if($_REQUEST['accountsfilter']){
+if(isset($_REQUEST['accountsfilter'])){
   $response = $XeroOAuth->request('GET', $XeroOAuth->url('Accounts', 'core'), array('Where' => 'Type=="BANK"'));
   if ($XeroOAuth->response['code'] == 200) {
     $accounts = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
@@ -43,7 +43,7 @@ if($_REQUEST['accountsfilter']){
     outputError($XeroOAuth); 
   }
   }
-if($_REQUEST['payrollemployees']){
+if(isset($_REQUEST['payrollemployees'])){
   $response = $XeroOAuth->request('GET', $XeroOAuth->url('Employees', 'payroll'), array());
   if ($XeroOAuth->response['code'] == 200) {
     $employees = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
@@ -53,7 +53,8 @@ if($_REQUEST['payrollemployees']){
     outputError($XeroOAuth); 
   }
   }
-if($_REQUEST['invoice']){
+if(isset($_REQUEST['invoice'])){
+	if(!isset($_REQUEST['method'])){
   $response = $XeroOAuth->request('GET', $XeroOAuth->url('Invoices', 'core'), array());
   if ($XeroOAuth->response['code'] == 200) {
     $invoices = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
@@ -67,12 +68,76 @@ if($_REQUEST['invoice']){
 			fclose($fh);							
     		echo "PDF copy downloaded, check your the directory of this script.</br>";
     	}
-    	
   } else {
     outputError($XeroOAuth); 
   }
+  }elseif(isset($_REQUEST['method']) && $_REQUEST['method'] == "put" ){
+		$xml = "<Invoices>
+				  <Invoice>
+				    <Type>ACCREC</Type>
+				    <Contact>
+				      <Name>Martin Hudson</Name>
+				    </Contact>
+				    <Date>2013-05-13T00:00:00</Date>
+				    <DueDate>2013-05-20T00:00:00</DueDate>
+				    <LineAmountTypes>Exclusive</LineAmountTypes>
+				    <LineItems>
+				      <LineItem>
+				        <Description>Monthly rental for property at 56a Wilkins Avenue</Description>
+				        <Quantity>4.3400</Quantity>
+				        <UnitAmount>395.00</UnitAmount>
+				        <AccountCode>200</AccountCode>
+				      </LineItem>
+				    </LineItems>
+				  </Invoice>
+				</Invoices>";
+		$response = $XeroOAuth->request('PUT', $XeroOAuth->url('Invoices', 'core'), array(), $xml);
+		  if ($XeroOAuth->response['code'] == 200) {
+		    $invoice = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+		    echo "" . count($invoice->Invoices[0]). " invoice created in this Xero organisation.";
+		    if(count($invoice->Invoices[0])>0){
+		    	echo "The first one is: </br>";
+		    	pr($invoice->Invoices[0]->Invoice);
+		    }
+		  } else {
+		    outputError($XeroOAuth); 
+		  }
+	}elseif(isset($_REQUEST['method']) && $_REQUEST['method'] == "post" ){
+		$xml = "<Invoices>
+				  <Invoice>
+				    <Type>ACCREC</Type>
+				    <Contact>
+				      <Name>Martin Hudson</Name>
+				    </Contact>
+				    <Date>2013-05-13T00:00:00</Date>
+				    <DueDate>2013-05-20T00:00:00</DueDate>
+				    <LineAmountTypes>Exclusive</LineAmountTypes>
+				    <LineItems>
+				      <LineItem>
+				        <Description>Monthly rental for property at 56a Wilkins Avenue</Description>
+				        <Quantity>4.3400</Quantity>
+				        <UnitAmount>395.00</UnitAmount>
+				        <AccountCode>200</AccountCode>
+				      </LineItem>
+				    </LineItems>
+				  </Invoice>
+				</Invoices>";
+		$response = $XeroOAuth->request('PUT', $XeroOAuth->url('Invoices', 'core'), array(), $xml);
+		  if ($XeroOAuth->response['code'] == 200) {
+		    $invoice = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+		    echo "" . count($invoice->Invoices[0]). " invoice created in this Xero organisation.";
+		    if(count($invoice->Invoices[0])>0){
+		    	echo "The first one is: </br>";
+		    	pr($invoice->Invoices[0]->Invoice);
+		    }
+		  } else {
+		    outputError($XeroOAuth); 
+		  }
+	}
+    	
+  
   }
-if($_REQUEST['banktransactions']){
+if(isset($_REQUEST['banktransactions'])){
 	if(!isset($_REQUEST['method'])){
 		  $response = $XeroOAuth->request('GET', $XeroOAuth->url('BankTransactions', 'core'), array(), "", "xml");
 		  if ($XeroOAuth->response['code'] == 200) {
@@ -122,7 +187,7 @@ if($_REQUEST['banktransactions']){
   
   
   
-  if($_REQUEST['organisation']){
+  if(isset($_REQUEST['organisation'])){
   $response = $XeroOAuth->request('GET', $XeroOAuth->url('Organisation', 'core'), array('page' => 0));
   if ($XeroOAuth->response['code'] == 200) {
     $organisation = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
@@ -132,7 +197,7 @@ if($_REQUEST['banktransactions']){
   }
   }
   
- if($_REQUEST['trialbalance']){
+ if(isset($_REQUEST['trialbalance'])){
   $response = $XeroOAuth->request('GET', $XeroOAuth->url('Reports/TrialBalance', 'core'), array('page' => 0));
   if ($XeroOAuth->response['code'] == 200) {
     $report = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
