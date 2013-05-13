@@ -13,6 +13,7 @@ function testLinks()
 			<li><a href="?banktransactions=1&method=put">BankTransactions PUT</a></li>
 			<li><a href="?payrollemployees=1">Payroll Employees GET</a></li>
 			<li><a href="?invoice=1">Invoices GET</a></li>
+			<li><a href="?invoicesfilter=1">Invoices GET - Where Contact Name contains "Martin"</a></li>
 			<li><a href="?invoice=1&method=put">Invoices PUT</a></li>
 			<li><a href="?invoice=1&method=post">Invoices POST</a></li>
 			<li><a href="?invoice=pdf">Invoice PDF</a></li>
