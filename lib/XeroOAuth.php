@@ -66,7 +66,7 @@ class XeroOAuth
             'curl_timeout' => 10,
             // for security you may want to set this to TRUE. If you do you need
             // to install the servers certificate in your local certificate store.
-            'curl_ssl_verifypeer' => true,
+            'curl_ssl_verifypeer' => 2,
         	// include ca-bundle.crt from http://curl.haxx.se/ca/cacert.pem
         	'curl_cainfo' => BASE_PATH . '/certs/ca-bundle.crt',
             'curl_followlocation' => false, // whether to follow redirects or not
