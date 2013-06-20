@@ -17,7 +17,7 @@ define("XRO_APP_TYPE", "Public");
 /**
  * Set a user agent string that matches your application name as set in the Xero developer centre
  */
-$useragent = "Ronan Private Test";
+$useragent = "Xero-OAuth-PHP Public Test";
 
 /**
  * Set your callback url or set 'oob' if none required
