@@ -53,6 +53,26 @@ if(isset($_REQUEST['payrollemployees'])){
     outputError($XeroOAuth); 
   }
   }
+  if(isset($_REQUEST['payruns'])){
+  $response = $XeroOAuth->request('GET', $XeroOAuth->url('PayRuns', 'payroll'), array('Where' => $_REQUEST['where']));
+  if ($XeroOAuth->response['code'] == 200) {
+    $accounts = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+    echo "There are " . count($accounts->PayRuns[0]). " PayRuns in this Xero organisation, the first one is: </br>";
+    pr($accounts->PayRuns[0]->PayRun);
+  } else {
+    outputError($XeroOAuth); 
+  }
+  }
+  if(isset($_REQUEST['superfundproducts'])){
+  $response = $XeroOAuth->request('GET', $XeroOAuth->url('SuperFundProducts', 'payroll'), array('ABN' => $_REQUEST['where']));
+  if ($XeroOAuth->response['code'] == 200) {
+    $accounts = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+    echo "There are " . count($accounts->SuperFundProducts[0]). " SuperFundProducts in this Xero organisation, the first one is: </br>";
+    pr($accounts->SuperFundProducts[0]->SuperFundProduct[0]);
+  } else {
+    outputError($XeroOAuth); 
+  }
+  }
 if(isset($_REQUEST['invoice'])){
 	if(!isset($_REQUEST['method'])){
   $response = $XeroOAuth->request('GET', $XeroOAuth->url('Invoices', 'core'), array());
