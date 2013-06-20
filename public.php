@@ -10,9 +10,9 @@ define('BASE_PATH', '.');
  * Define which app type you are using: 
  * Private - private app method
  * Public - standard public app method
- * Partner - partner app method      
+ * Public - partner app method      
  */
-define("XRO_APP_TYPE", "Partner");
+define("XRO_APP_TYPE", "Public");
 
 /**
  * Set a user agent string that matches your application name as set in the Xero developer centre
@@ -22,7 +22,7 @@ $useragent = "Ronan Private Test";
 /**
  * Set your callback url or set 'oob' if none required
  */
-define("OAUTH_CALLBACK", 'http://localhost/XeroOAuth-PHP-Tests/partner.php');
+define("OAUTH_CALLBACK", 'http://localhost/XeroOAuth-PHP-Tests/public.php');
 
 /**
  * Application specific settings
@@ -36,18 +36,18 @@ define("OAUTH_CALLBACK", 'http://localhost/XeroOAuth-PHP-Tests/partner.php');
 include 'tests/testRunner.php';
 
 $signatures = array(
-    'consumer_key' => 'MWSAN8S5AAFPMMNBV3DQIEWH4TM9FE',
-    'shared_secret' => 's',
+    'consumer_key' => 'RXTULGBEFTFUNC8MI3RG07PGJYDXWZ',
+    'shared_secret' => 'VB21VH0X7GOOQENAPD3FPWTBE183HI',
     // API versions 
     'core_version' => '2.0',
     'payroll_version' => '1.0'
 );
 
-if (XRO_APP_TYPE == "Private" || XRO_APP_TYPE == "Partner") {
+if (XRO_APP_TYPE == "Private" || XRO_APP_TYPE == "Public") {
     $signatures['rsa_private_key'] = BASE_PATH . '/certs/privatekey.pem';
     $signatures['rsa_public_key']  = BASE_PATH . '/certs/publickey.cer';
 }
-if (XRO_APP_TYPE == "Partner") {
+if (XRO_APP_TYPE == "Public") {
     $signatures['curl_ssl_cert']     = BASE_PATH . '/certs/entrust-cert-RQ3.pem';
     $signatures['curl_ssl_password'] = '1234';
     $signatures['curl_ssl_key']      = BASE_PATH . '/certs/entrust-private-RQ3.pem';
