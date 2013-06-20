@@ -1,31 +1,8 @@
-
-<<<<<<< HEAD
-=======
-.gitignore
-
 .settings
-
 .project
-
 .buildpath
-
->>>>>>> refactor
-.gitignore
-
+.gitattributes
 *.pem
-
-*.p12
-
-*.cer
-
-<<<<<<< HEAD
-.gitignore
-
-*.pem
-
 *.p12
 *.cer
 *.pfx
-=======
-*.pfx
->>>>>>> refactor
