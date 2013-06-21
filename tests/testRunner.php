@@ -25,6 +25,7 @@ function testLinks()
   			<li><a href="?wipe=1">Start Over and delete stored tokens</a></li>';
     } elseif(XRO_APP_TYPE !== 'Private') {
         echo '<li><a href="?authenticate=1">Authenticate</a></li>';
+        echo '<li><a href="?authenticate=2">Authenticate with Payroll API support (Australia only)</a></li>';
     }
     
     

@@ -111,7 +111,7 @@ if ($checkErrors > 0) {
         
         if ($XeroOAuth->response['code'] == 200) {
             //$scope = 'payroll.payrollcalendars,payroll.superfunds,payroll.payruns,payroll.payslip,payroll.employees,payroll.TaxDeclaration';
-            $scope = 'payroll.employees,payroll.payruns';
+            if($_REQUEST['authenticate']>1) $scope = 'payroll.employees,payroll.payruns';
             
             print_r($XeroOAuth->extract_params($XeroOAuth->response['response']));
             $_SESSION['oauth'] = $XeroOAuth->extract_params($XeroOAuth->response['response']);
