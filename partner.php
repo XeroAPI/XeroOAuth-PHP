@@ -36,7 +36,7 @@ define("OAUTH_CALLBACK", 'http://localhost/XeroOAuth-PHP-Tests/partner.php');
 include 'tests/testRunner.php';
 
 $signatures = array(
-    'consumer_key' => 'MWSAN8S5AAFPMMNBV3DQIEWH4TM9FE',
+    'consumer_key' => 'YOURCONSUMERKEY',
     'shared_secret' => 's',
     // API versions 
     'core_version' => '2.0',
