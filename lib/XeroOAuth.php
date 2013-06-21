@@ -157,6 +157,27 @@ class XeroOAuth
         }
         return $decoded;
     }
+
+    /**
+   * Encodes the string or array passed in a way compatible with OAuth.
+   * If an array is passed each array value will will be encoded.
+   *
+   * @param mixed $data the scalar or array to encode
+   * @return $data encoded in a way compatible with OAuth
+   */
+      private function safe_encode($data) {
+        if (is_array($data)) {
+          return array_map(array($this, 'safe_encode'), $data);
+        } else if (is_scalar($data)) {
+          return str_ireplace(
+            array('+', '%7E'),
+            array(' ', '~'),
+            rawurlencode($data)
+          );
+        } else {
+          return '';
+        }
+      }
     
     /**
      * Decodes the string or array from it's URL encoded form
@@ -212,9 +233,9 @@ class XeroOAuth
                         // Multipart params haven't been encoded yet.
                         // Not sure why you would do a multipart GET but anyway, here's the support for it
                         if ($this->config['multipart']) {
-                            $params[] = $this->safe_encode($k) . '=' . $this->safe_encode($v);
-                        } else {
                             $params[] = $k . '=' . $v;
+                        } else {
+                            $params[] = $this->safe_encode($k) . '=' . $this->safe_encode($v);
                         }
                     }
                     $qs                   = implode('&', $params);
@@ -276,18 +297,19 @@ class XeroOAuth
                 break;
             case 'POST':
                 curl_setopt($c, CURLOPT_POST, TRUE);
-                $post_body = urlencode($this->xml);
+                $post_body = $this->safe_encode($this->xml);
         		curl_setopt($c, CURLOPT_POSTFIELDS, $post_body);
-        		$this->request_params['xml'] = $this->xml;
+        		$this->request_params['xml'] = $post_body;
                 
                 break;
             case 'PUT':
                 $fh = fopen('php://memory', 'w+');
-                fwrite($fh, $this->xml);
+                $put_body = $this->safe_encode($this->xml);
+                fwrite($fh, $put_body);
                 rewind($fh);
                 curl_setopt($c, CURLOPT_PUT, true);
                 curl_setopt($c, CURLOPT_INFILE, $fh);
-                curl_setopt($c, CURLOPT_INFILESIZE, strlen($this->xml));
+                curl_setopt($c, CURLOPT_INFILESIZE, strlen($put_body));
                 
                 break;
             default:
