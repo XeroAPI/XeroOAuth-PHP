@@ -11,6 +11,8 @@ function testLinks()
 			<li><a href="?accountsfilter=1">Accounts GET - Where Type is BANK</a></li>
 			<li><a href="?banktransactions=1">BankTransactions GET</a></li>
 			<li><a href="?banktransactions=1&method=put">BankTransactions PUT</a></li>
+            <li><a href="?contacts=1">Contacts GET</a></li>
+            <li><a href="?contacts=1&method=post">Contacts POST</a></li>
 			<li><a href="?payrollemployees=1">Payroll Employees GET</a></li>
 			<li><a href="?payruns=1">Payroll Payruns GET</a></li>
 			<li><a href="?invoice=1">Invoices GET</a></li>
@@ -20,9 +22,9 @@ function testLinks()
 			<li><a href="?invoice=pdf">Invoice PDF</a></li>
 			<li><a href="?trialbalance=1">Trial Balance</a></li>';
     
+  if (XRO_APP_TYPE == 'Partner')   echo '<li><a href="?refresh=1">Refresh access token</a></li>';
     if (XRO_APP_TYPE !== 'Private' && isset($_SESSION['access_token'])) {
-        echo '<li><a href="?refresh=1">Refresh access token</a></li>
-  			<li><a href="?wipe=1">Start Over and delete stored tokens</a></li>';
+        echo '<li><a href="?wipe=1">Start Over and delete stored tokens</a></li>';
     } elseif(XRO_APP_TYPE !== 'Private') {
         echo '<li><a href="?authenticate=1">Authenticate</a></li>';
         echo '<li><a href="?authenticate=2">Authenticate with Payroll API support (Australia only)</a></li>';
