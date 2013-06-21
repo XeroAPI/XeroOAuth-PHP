@@ -190,7 +190,7 @@ if(isset($_REQUEST['banktransactions'])){
 			      <Date>2013-04-16T00:00:00</Date>
 			      <LineItems>
 			        <LineItem>
-			          <Description>Yearly Bank Account Fee</Description>
+			          <Description>Yearly Bank &amp; Account Fee</Description>
 			          <Quantity>1.0000</Quantity>
 			          <UnitAmount>20.00</UnitAmount>
 			          <AccountCode>400</AccountCode>
@@ -215,6 +215,40 @@ if(isset($_REQUEST['banktransactions'])){
 	}
   }
   
+  if(isset($_REQUEST['contacts'])){
+	if(!isset($_REQUEST['method'])){
+  $response = $XeroOAuth->request('GET', $XeroOAuth->url('Contacts', 'core'), array());
+  if ($XeroOAuth->response['code'] == 200) {
+    $contacts = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+    echo "There are " . count($contacts->Contacts[0]). " contacts in this Xero organisation, the first one is: </br>";
+    pr($contacts->Contacts[0]->Contact);
+    	
+  } else {
+    outputError($XeroOAuth); 
+  }
+  }elseif(isset($_REQUEST['method']) && $_REQUEST['method'] == "post" ){
+		$xml = "<Contacts>
+				  <Contact>
+				    <Name>Jameson + Co</Name>
+				    <EmailAddress>emailaddress@yourdomain.com</EmailAddress>
+				    <SkypeUserName>Sîne klâwen durh die wolken sint geslagen</SkypeUserName>
+				    <FirstName>Chester</FirstName>
+      				<LastName>d’Arenberg</LastName>
+				  </Contact>
+				</Contacts>";
+		$response = $XeroOAuth->request('POST', $XeroOAuth->url('Contacts', 'core'), array(), $xml);
+		  if ($XeroOAuth->response['code'] == 200) {
+		    $contact = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+		    echo "" . count($contact->Contacts[0]). " contact created in this Xero organisation.";
+		    if(count($contact->Contacts[0])>0){
+		    	echo "The first one is: </br>";
+		    	pr($contact->Contacts[0]->Contact);
+		    }
+		  } else {
+		    outputError($XeroOAuth); 
+		  }
+	}
+}
   
   
   if(isset($_REQUEST['organisation'])){
