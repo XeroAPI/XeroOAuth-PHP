@@ -64,6 +64,11 @@ class XeroOAuth
         $this->_xero_curl_options     = array( // you probably don't want to change any of these curl values
             'curl_connecttimeout' => 30,
             'curl_timeout' => 10,
+         	// for security you may want to set this to TRUE. If you do you need
+            // to install the servers certificate in your local certificate store.
+            'curl_ssl_verifypeer' => 2,
+         	// include ca-bundle.crt from http://curl.haxx.se/ca/cacert.pem
+        	'curl_cainfo' => BASE_PATH . '/certs/ca-bundle.crt',
             'curl_followlocation' => false, // whether to follow redirects or not
             'curl_ssl_verifyhost' => true,
             // support for proxy servers
@@ -73,13 +78,6 @@ class XeroOAuth
             'curl_verbose' => true
         );
         
-         if ($this->config['application_type'] == "Partner") {
-             // for security you may want to set this to TRUE. If you do you need
-            // to install the servers certificate in your local certificate store.
-            $this->_xero_curl_options['curl_ssl_verifypeer'] = 2;
-         	// include ca-bundle.crt from http://curl.haxx.se/ca/cacert.pem
-        	$this->_xero_curl_options['curl_cainfo'] = BASE_PATH . '/certs/ca-bundle.crt';
-         }
         
         $this->config = array_merge($config, $this->_xero_defaults, $this->_xero_consumer_options, $this->_xero_curl_options);
     }
