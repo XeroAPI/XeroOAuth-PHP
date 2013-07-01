@@ -292,12 +292,14 @@ class XeroOAuth
         
         switch ($this->method) {
             case 'GET':
+            	$contentLength = 0;
                 break;
             case 'POST':
                 curl_setopt($c, CURLOPT_POST, TRUE);
                 $post_body = $this->safe_encode($this->xml);
         		curl_setopt($c, CURLOPT_POSTFIELDS, $post_body);
         		$this->request_params['xml'] = $post_body;
+        		$contentLength = strlen($post_body);
                 
                 break;
             case 'PUT':
@@ -308,6 +310,7 @@ class XeroOAuth
                 curl_setopt($c, CURLOPT_PUT, true);
                 curl_setopt($c, CURLOPT_INFILE, $fh);
                 curl_setopt($c, CURLOPT_INFILESIZE, strlen($put_body));
+                $contentLength = strlen($put_body);
                 
                 break;
             default:
@@ -326,7 +329,7 @@ class XeroOAuth
         } else {
             // CURL will set length to -1 when there is no data
             $this->headers['Content-Type']   = '';
-            $this->headers['Content-Length'] = '';
+            $this->headers['Content-Length'] = $contentLength;
         }
         
         $this->headers['Expect'] = '';
