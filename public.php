@@ -22,7 +22,7 @@ $useragent = "Xero-OAuth-PHP Public";
 /**
  * Set your callback url or set 'oob' if none required
  */
-define("OAUTH_CALLBACK", 'http://localhost/XeroOAuth-PHP-Tests/public.php');
+define("OAUTH_CALLBACK", 'http://localhost/XeroOAuth-PHP/public.php');
 
 /**
  * Application specific settings
