@@ -99,10 +99,8 @@ if ($checkErrors > 0) {
         }
         // start the OAuth dance
     } elseif (isset($_REQUEST['authenticate']) || isset($_REQUEST['authorize'])) {
-        $callback = isset($_REQUEST['oob']) ? 'oob' : $here;
-        
-        $params = array(
-            'oauth_callback' => $callback
+       $params = array(
+            'oauth_callback' => OAUTH_CALLBACK
         );
         
         
