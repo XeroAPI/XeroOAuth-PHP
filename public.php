@@ -43,11 +43,11 @@ $signatures = array(
     'payroll_version' => '1.0'
 );
 
-if (XRO_APP_TYPE == "Private" || XRO_APP_TYPE == "Public") {
+if (XRO_APP_TYPE == "Private" || XRO_APP_TYPE == "Partner") {
     $signatures['rsa_private_key'] = BASE_PATH . '/certs/privatekey.pem';
     $signatures['rsa_public_key']  = BASE_PATH . '/certs/publickey.cer';
 }
-if (XRO_APP_TYPE == "Public") {
+if (XRO_APP_TYPE == "Partner") {
     $signatures['curl_ssl_cert']     = BASE_PATH . '/certs/entrust-cert-RQ3.pem';
     $signatures['curl_ssl_password'] = '1234';
     $signatures['curl_ssl_key']      = BASE_PATH . '/certs/entrust-private-RQ3.pem';
