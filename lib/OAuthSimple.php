@@ -101,14 +101,14 @@ class OAuthSimple {
         return $this;
     }
 
-    /** reset the parameters and url 
+    /** reset the parameters and url
     *
     */
     function reset() {
         $this->_parameters=null;
         $this->path=null;
         $this->sbs=null;
-        return $this;    
+        return $this;
     }
 
     /** set the parameters either from a hash or a string
@@ -116,7 +116,7 @@ class OAuthSimple {
     * @param {string,object} List of parameters for the call, this can either be a URI string (e.g. "foo=bar&gorp=banana" or an object/hash)
     */
     function setParameters ($parameters=Array()) {
-        
+
         if (is_string($parameters))
             $parameters = $this->_parseParameterString($parameters);
         if (empty($this->_parameters))
@@ -386,7 +386,7 @@ class OAuthSimple {
         ksort($this->_parameters);
         foreach ( $this->_parameters as $paramName=>$paramValue) {
       	 if($paramName=='xml'){
-      	 	if($filter=="true") 
+      	 	if($filter=="true")
       	 		continue;
        		}
             if (preg_match('/\w+_secret/',$paramName))
@@ -399,19 +399,19 @@ class OAuthSimple {
                 continue;
             }
             array_push($elements,$this->_oauthEscape($paramName).'='.$this->_oauthEscape($paramValue));
-            
+
         }
         return join('&',$elements);
     }
-    
+
     function _readFile($filePath) {
-       
+
        	$fp = fopen($filePath,"r");
-       	
+
 		$file_contents = fread($fp,8192);
-		
+
 		fclose($fp);
-		
+
         return $file_contents;
     }
 
@@ -425,32 +425,32 @@ class OAuthSimple {
         switch($this->_parameters['oauth_signature_method'])
         {
         	case 'RSA-SHA1':
-        	
-        		// Fetch the public key  
+
+        		// Fetch the public key
                 if($publickey = openssl_get_publickey($this->_readFile($this->_secrets['public_key']))){
-                	
+
                 }else{
                 	throw new OAuthSimpleException('Cannot access public key for signing');
                 }
-                
-                // Fetch the private key 
+
+                // Fetch the private key
                 if($privatekeyid = openssl_pkey_get_private($this->_readFile($this->_secrets['private_key'])))
                 {
                 	// Sign using the key
                  	$this->sbs = $this->_oauthEscape($this->_action).'&'.$this->_oauthEscape($this->_path).'&'.$this->_oauthEscape($this->_normalizedParameters());
-                	
+
                		$ok = openssl_sign($this->sbs, $signature, $privatekeyid);
-               
+
                   	// Release the key resource
 					openssl_free_key($privatekeyid);
-           
+
                		return base64_encode($signature);
-                
+
                 }else{
                 	throw new OAuthSimpleException('Cannot access private key for signing');
                 }
-                
-               
+
+
             case 'PLAINTEXT':
                 return urlencode($secretKey);
 

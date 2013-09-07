@@ -2,7 +2,7 @@
 
 function testLinks()
 {
-    
+
     if (isset($_SESSION['access_token']) || XRO_APP_TYPE == 'Private')
         echo '<ul>
 			<li><a href="?=1">Home</a></li>
@@ -21,7 +21,7 @@ function testLinks()
 			<li><a href="?invoice=1&method=post">Invoices POST</a></li>
 			<li><a href="?invoice=pdf">Invoice PDF</a></li>
 			<li><a href="?trialbalance=1">Trial Balance</a></li>';
-    
+
   if (XRO_APP_TYPE == 'Partner')   echo '<li><a href="?refresh=1">Refresh access token</a></li>';
     if (XRO_APP_TYPE !== 'Private' && isset($_SESSION['access_token'])) {
         echo '<li><a href="?wipe=1">Start Over and delete stored tokens</a></li>';
@@ -29,10 +29,10 @@ function testLinks()
         echo '<li><a href="?authenticate=1">Authenticate</a></li>';
         echo '<li><a href="?authenticate=2">Authenticate with Payroll API support (Australia only)</a></li>';
     }
-    
-    
+
+
     echo '</ul>';
-    
+
 }
 
 
@@ -51,7 +51,7 @@ function persistSession($response)
     } else {
         return false;
     }
-    
+
 }
 
 /**
@@ -69,7 +69,7 @@ function retrieveSession()
     } else {
         return false;
     }
-    
+
 }
 
 function outputError($XeroOAuth)
@@ -85,7 +85,7 @@ function outputError($XeroOAuth)
  */
 function pr($obj)
 {
-    
+
     if (!is_cli())
         echo '<pre style="word-wrap: break-word">';
     if (is_object($obj))
