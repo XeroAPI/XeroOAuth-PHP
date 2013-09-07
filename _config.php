@@ -37,15 +37,17 @@ define("OAUTH_CALLBACK",     'http://localhost/XeroOAuth-PHP/example.php');
  * rsa_public_key:  application certificate public cert - not needed for public applications
  */
 
-$signatures = array( 'consumer_key'     => 'MWSAN8S5AAFPMMNBV3DQIEWH4TM9FE',
-              	      	 'shared_secret'    => 's',
-						 	// API versions
-                     	 	'core_version'					=> '2.0',
-							'payroll_version'				=> '1.0');
+$signatures = array(
+    'consumer_key'     => 'MWSAN8S5AAFPMMNBV3DQIEWH4TM9FE',
+    'shared_secret'    => 's',
+    // API versions
+    'core_version'=> '2.0',
+    'payroll_version'=> '1.0',
+);
 
-if(XRO_APP_TYPE=="Private"||XRO_APP_TYPE=="Partner"){
-	$signatures['rsa_private_key']	= BASE_PATH . '/certs/privatekey.pem';
-	$signatures['rsa_public_key']	= BASE_PATH . '/certs/publickey.cer';
+if (XRO_APP_TYPE=="Private"||XRO_APP_TYPE=="Partner") {
+    $signatures['rsa_private_key']= BASE_PATH . '/certs/privatekey.pem';
+    $signatures['rsa_public_key']= BASE_PATH . '/certs/publickey.cer';
 }
 
 
@@ -56,10 +58,10 @@ if(XRO_APP_TYPE=="Private"||XRO_APP_TYPE=="Partner"){
  * openssl pkcs12 -in entrust-client.p12 -clcerts -nokeys -out entrust-cert.pem
  * openssl pkcs12 -in entrust-client.p12 -nocerts -out entrust-private.pem <- you will be prompted to enter a password
  */
-if(XRO_APP_TYPE=="Partner"){
-	$signatures['curl_ssl_cert'] = BASE_PATH . '/certs/entrust-cert-RQ3.pem';
-	$signatures['curl_ssl_password'] = '1234';
-	$signatures['curl_ssl_key'] = BASE_PATH . '/certs/entrust-private-RQ3.pem';
+if (XRO_APP_TYPE=="Partner") {
+    $signatures['curl_ssl_cert'] = BASE_PATH . '/certs/entrust-cert-RQ3.pem';
+    $signatures['curl_ssl_password'] = '1234';
+    $signatures['curl_ssl_key'] = BASE_PATH . '/certs/entrust-private-RQ3.pem';
 }
 
 

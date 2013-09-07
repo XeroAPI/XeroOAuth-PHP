@@ -64,11 +64,11 @@ class XeroOAuth
         $this->_xero_curl_options     = array( // you probably don't want to change any of these curl values
             'curl_connecttimeout' => 30,
             'curl_timeout' => 10,
-         	// for security you may want to set this to TRUE. If you do you need
+             // for security you may want to set this to TRUE. If you do you need
             // to install the servers certificate in your local certificate store.
             'curl_ssl_verifypeer' => 2,
-         	// include ca-bundle.crt from http://curl.haxx.se/ca/cacert.pem
-        	'curl_cainfo' => BASE_PATH . '/certs/ca-bundle.crt',
+             // include ca-bundle.crt from http://curl.haxx.se/ca/cacert.pem
+            'curl_cainfo' => BASE_PATH . '/certs/ca-bundle.crt',
             'curl_followlocation' => false, // whether to follow redirects or not
             'curl_ssl_verifyhost' => true,
             // support for proxy servers
@@ -292,14 +292,14 @@ class XeroOAuth
 
         switch ($this->method) {
             case 'GET':
-            	$contentLength = 0;
+                $contentLength = 0;
                 break;
             case 'POST':
                 curl_setopt($c, CURLOPT_POST, TRUE);
                 $post_body = $this->safe_encode($this->xml);
-        		curl_setopt($c, CURLOPT_POSTFIELDS, $post_body);
-        		$this->request_params['xml'] = $post_body;
-        		$contentLength = strlen($post_body);
+                curl_setopt($c, CURLOPT_POSTFIELDS, $post_body);
+                $this->request_params['xml'] = $post_body;
+                $contentLength = strlen($post_body);
 
                 break;
             case 'PUT':
@@ -394,8 +394,8 @@ class XeroOAuth
      */
     function request($method, $url, $params = array(), $xml = "", $format = 'xml')
     {
-    	// removed these as function parameters for now
-    	$useauth = true; $multipart = false;
+        // removed these as function parameters for now
+        $useauth = true; $multipart = false;
 
         if (isset($format)) {
             switch ($format) {
@@ -416,7 +416,7 @@ class XeroOAuth
             $this->xml = $xml;
 
         if($method == "POST")
-        	$params['xml'] = $xml;
+            $params['xml'] = $xml;
 
         $this->prepare_method($method);
         $this->config['multipart'] = $multipart;
