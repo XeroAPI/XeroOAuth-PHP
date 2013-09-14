@@ -1,5 +1,9 @@
 <?php
-require 'lib/OAuthSimple.php';
+// Allow OAuthSimple to be autoloaded instead of always including directly.
+// The class_exists() call fires the autoloader.
+if(!class_exists('OAuthSimple')){
+    require 'lib/OAuthSimple.php';
+}
 
 /** Define a custom Exception for easy trap and detection
  */
@@ -61,6 +65,11 @@ class XeroOAuth
             'access_token_path' => 'oauth/AccessToken',
             'authorize_path' => 'oauth/Authorize'
         );
+
+        // Remove forced dependency on BASE_PATH constant.
+        // Note that __DIR__ is PHP 5.3 and above only.
+        $base_path = defined('BASE_PATH') ? BASE_PATH : dirname(__DIR__);
+
         $this->_xero_curl_options     = array( // you probably don't want to change any of these curl values
             'curl_connecttimeout' => 30,
             'curl_timeout' => 10,
@@ -68,7 +77,7 @@ class XeroOAuth
             // to install the servers certificate in your local certificate store.
             'curl_ssl_verifypeer' => 2,
          	// include ca-bundle.crt from http://curl.haxx.se/ca/cacert.pem
-        	'curl_cainfo' => BASE_PATH . '/certs/ca-bundle.crt',
+            'curl_cainfo' => $base_path . '/certs/ca-bundle.crt',
             'curl_followlocation' => false, // whether to follow redirects or not
             'curl_ssl_verifyhost' => true,
             // support for proxy servers
