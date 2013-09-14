@@ -1,5 +1,9 @@
 <?php
-require 'lib/OAuthSimple.php';
+// Allow OAuthSimple to be autoloaded instead of always including directly.
+// The class_exists() call fires the autoloader.
+if(!class_exists('OAuthSimple')){
+    require 'lib/OAuthSimple.php';
+}
 
 /** Define a custom Exception for easy trap and detection
  */
