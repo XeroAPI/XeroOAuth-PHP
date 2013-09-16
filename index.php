@@ -12,7 +12,6 @@
               <li>A sample script for Partner API applications <a href="partner.php">partner.php</a>
             </li>
         </ol>
-      
+
     </body>
 </html>
-
