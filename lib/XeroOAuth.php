@@ -70,7 +70,9 @@ class XeroOAuth
              // include ca-bundle.crt from http://curl.haxx.se/ca/cacert.pem
             'curl_cainfo' => BASE_PATH . '/certs/ca-bundle.crt',
             'curl_followlocation' => false, // whether to follow redirects or not
-            'curl_ssl_verifyhost' => true,
+            // TRUE/1 is not a valid ssl verifyhost value with curl >= 7.28.1 and 2 is more secure as well.
+            // More details here: http://php.net/manual/en/function.curl-setopt.php
+            'curl_ssl_verifyhost' => 2,
             // support for proxy servers
             'curl_proxy' => false, // really you don't want to use this if you are using streaming
             'curl_proxyuserpwd' => false, // format username:password for proxy, if required
