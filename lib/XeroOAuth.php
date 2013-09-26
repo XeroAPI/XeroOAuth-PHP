@@ -414,6 +414,10 @@ class XeroOAuth
             }
         }
 
+        if($params['If-Modified-Since'])
+         $modDate = "If-Modified-Since: "  . $params['If-Modified-Since'];
+             $this->headers['If-Modified-Since'] = $params['If-Modified-Since'];
+            
         if ($xml !== "")
             $this->xml = $xml;
 

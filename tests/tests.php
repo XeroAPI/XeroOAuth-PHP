@@ -167,6 +167,16 @@ if ( isset($_REQUEST['wipe'])) {
            outputError($XeroOAuth);
        }
    }
+if (isset($_REQUEST['invoicesmodified'])) {
+       $response = $XeroOAuth->request('GET', $XeroOAuth->url('Invoices', 'core'), array('If-Modified-Since' => gmdate("M d Y H:i:s",(time() - (1 * 24 * 60 * 60)))));
+       if ($XeroOAuth->response['code'] == 200) {
+           $accounts = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+           echo "There are " . count($accounts->Invoices[0]). " matching invoices in this Xero organisation, the first one is: </br>";
+           pr($accounts->Invoices[0]->Invoice);
+       } else {
+           outputError($XeroOAuth);
+       }
+   }
    if (isset($_REQUEST['banktransactions'])) {
        if (!isset($_REQUEST['method'])) {
            $response = $XeroOAuth->request('GET', $XeroOAuth->url('BankTransactions', 'core'), array(), "", "xml");
