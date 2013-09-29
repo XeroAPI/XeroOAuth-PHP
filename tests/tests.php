@@ -249,7 +249,7 @@ if (isset($_REQUEST['invoicesmodified'])) {
            $response = $XeroOAuth->request('POST', $XeroOAuth->url('Contacts', 'core'), array(), $xml);
            if ($XeroOAuth->response['code'] == 200) {
                $contact = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
-               echo "" . count($contact->Contacts[0]). " contact created in this Xero organisation.";
+               echo "" . count($contact->Contacts[0]). " contact created/updated in this Xero organisation.";
                if (count($contact->Contacts[0])>0) {
                    echo "The first one is: </br>";
                    pr($contact->Contacts[0]->Contact);
