@@ -13,6 +13,7 @@ function testLinks()
                 <li><a href="?banktransactions=1&method=put">BankTransactions PUT</a></li>
                 <li><a href="?contacts=1">Contacts GET</a></li>
                 <li><a href="?contacts=1&method=post">Contacts POST</a></li>
+                <li><a href="?contacts=1&method=put">Contacts PUT</a></li>
                 <li><a href="?payrollemployees=1">Payroll Employees GET</a></li>
                 <li><a href="?payruns=1">Payroll Payruns GET</a></li>
                 <li><a href="?invoice=1">Invoices GET</a></li>

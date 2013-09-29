@@ -257,7 +257,24 @@ if (isset($_REQUEST['invoicesmodified'])) {
            } else {
                outputError($XeroOAuth);
            }
-       }
+       }elseif(isset($_REQUEST['method']) && $_REQUEST['method'] == "put" ){
+    $xml = "<Contacts>
+            <Contact>
+              <Name>Orlena Greenville</Name>
+            </Contact>
+          </Contacts>";
+    $response = $XeroOAuth->request('PUT', $XeroOAuth->url('Contacts', 'core'), array(), $xml);
+      if ($XeroOAuth->response['code'] == 200) {
+        $contacts = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+        echo "There are " . count($contacts->Contacts[0]). " successful contact(s) created in this Xero organisation.";
+        if(count($contacts->Contacts[0])>0){
+          echo "The first one is: </br>";
+          pr($contacts->Contacts[0]->Contact);
+        }
+      } else {
+        outputError($XeroOAuth); 
+      }
+  }
    }
 
 
