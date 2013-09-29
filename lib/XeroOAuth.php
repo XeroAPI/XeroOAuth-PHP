@@ -13,20 +13,20 @@ class XeroOAuth
     var $_xero_consumer_options;
     var $_action;
     var $_nonce_chars;
-    
+
     /**
      * Creates a new XeroOAuth object
      *
      * @param string $config, the configuration settings
      */
-    
+
     function __construct($config)
     {
         $this->params          = array();
         $this->headers         = array();
         $this->auto_fixed_time = false;
         $this->buffer          = null;
-        
+
         if (!empty($config['application_type'])) {
             switch ($config['application_type']) {
                 case "Public":
@@ -55,7 +55,7 @@ class XeroOAuth
                     break;
             }
         }
-        
+
         $this->_xero_consumer_options = array(
             'request_token_path' => 'oauth/RequestToken',
             'access_token_path' => 'oauth/AccessToken',
@@ -64,23 +64,26 @@ class XeroOAuth
         $this->_xero_curl_options     = array( // you probably don't want to change any of these curl values
             'curl_connecttimeout' => 30,
             'curl_timeout' => 10,
-            // for security you may want to set this to TRUE. If you do you need
+             // for security you may want to set this to TRUE. If you do you need
             // to install the servers certificate in your local certificate store.
             'curl_ssl_verifypeer' => 2,
-        	// include ca-bundle.crt from http://curl.haxx.se/ca/cacert.pem
-        	'curl_cainfo' => BASE_PATH . '/certs/ca-bundle.crt',
+             // include ca-bundle.crt from http://curl.haxx.se/ca/cacert.pem
+            'curl_cainfo' => BASE_PATH . '/certs/ca-bundle.crt',
             'curl_followlocation' => false, // whether to follow redirects or not
-            'curl_ssl_verifyhost' => true,
+            // TRUE/1 is not a valid ssl verifyhost value with curl >= 7.28.1 and 2 is more secure as well.
+            // More details here: http://php.net/manual/en/function.curl-setopt.php
+            'curl_ssl_verifyhost' => 2,
             // support for proxy servers
             'curl_proxy' => false, // really you don't want to use this if you are using streaming
             'curl_proxyuserpwd' => false, // format username:password for proxy, if required
             'curl_encoding' => '', // leave blank for all supported formats, else use gzip, deflate, identity
             'curl_verbose' => true
         );
-        
+
+
         $this->config = array_merge($config, $this->_xero_defaults, $this->_xero_consumer_options, $this->_xero_curl_options);
     }
-    
+
     /**
      * Utility function to parse the returned curl headers and store them in the
      * class array variable.
@@ -99,7 +102,7 @@ class XeroOAuth
         }
         return strlen($header);
     }
-    
+
     /**
      * Utility function to parse the returned curl buffer and store them until
      * an EOL is found. The buffer for curl is an undefined size so we need
@@ -117,25 +120,25 @@ class XeroOAuth
             $this->buffer .= $data;
             return $l;
         }
-        
+
         $buffered = explode($this->config['streaming_eol'], $data);
         $content  = $this->buffer . $buffered[0];
-        
+
         $this->metrics['tweets']++;
         $this->metrics['bytes'] += strlen($content);
-        
+
         if (!function_exists($this->config['streaming_callback']))
             return 0;
-        
+
         $metrics      = $this->update_metrics();
         $stop         = call_user_func($this->config['streaming_callback'], $content, strlen($content), $metrics);
         $this->buffer = $buffered[1];
         if ($stop)
             return 0;
-        
+
         return $l;
     }
-    
+
     /**
      * Extracts and decodes OAuth parameters from the passed string
      *
@@ -154,7 +157,28 @@ class XeroOAuth
         }
         return $decoded;
     }
-    
+
+    /**
+   * Encodes the string or array passed in a way compatible with OAuth.
+   * If an array is passed each array value will will be encoded.
+   *
+   * @param mixed $data the scalar or array to encode
+   * @return $data encoded in a way compatible with OAuth
+   */
+      private function safe_encode($data) {
+        if (is_array($data)) {
+          return array_map(array($this, 'safe_encode'), $data);
+        } else if (is_scalar($data)) {
+          return str_ireplace(
+            array('+', '%7E'),
+            array(' ', '~'),
+            rawurlencode($data)
+          );
+        } else {
+          return '';
+        }
+      }
+
     /**
      * Decodes the string or array from it's URL encoded form
      * If an array is passed each array value will will be decoded.
@@ -175,7 +199,7 @@ class XeroOAuth
             return '';
         }
     }
-    
+
     /**
      * Prepares the HTTP method for use in the base string by converting it to
      * uppercase.
@@ -188,7 +212,7 @@ class XeroOAuth
     {
         $this->method = strtoupper($method);
     }
-    
+
     /**
      * Makes a curl request. Takes no parameters as all should have been prepared
      * by the request method
@@ -200,7 +224,7 @@ class XeroOAuth
         // method handling
         switch ($this->method) {
             case 'POST':
-                
+
                 break;
             default:
                 // GET, DELETE request so convert the parameters to a querystring
@@ -209,9 +233,9 @@ class XeroOAuth
                         // Multipart params haven't been encoded yet.
                         // Not sure why you would do a multipart GET but anyway, here's the support for it
                         if ($this->config['multipart']) {
-                            $params[] = $this->safe_encode($k) . '=' . $this->safe_encode($v);
-                        } else {
                             $params[] = $k . '=' . $v;
+                        } else {
+                            $params[] = $this->safe_encode($k) . '=' . $this->safe_encode($v);
                         }
                     }
                     $qs                   = implode('&', $params);
@@ -220,7 +244,7 @@ class XeroOAuth
                 }
                 break;
         }
-        
+
         // configure curl
         $c         = curl_init();
         $useragent = (isset($this->config['user_agent'])) ? (empty($this->config['user_agent']) ? 'XeroOAuth-PHP' : $this->config['user_agent']) : 'XeroOAuth-PHP';
@@ -245,7 +269,7 @@ class XeroOAuth
             CURLOPT_HEADER => FALSE,
             CURLINFO_HEADER_OUT => TRUE
         ));
-        
+
         if ($this->config['application_type'] == "Partner") {
             curl_setopt_array($c, array(
                 // ssl client cert options for partner apps
@@ -254,10 +278,10 @@ class XeroOAuth
                 CURLOPT_SSLKEY => $this->config['curl_ssl_key']
             ));
         }
-        
+
         if ($this->config['curl_proxyuserpwd'] !== false)
             curl_setopt($c, CURLOPT_PROXYUSERPWD, $this->config['curl_proxyuserpwd']);
-        
+
         if (isset($this->config['is_streaming'])) {
             // process the body
             $this->response['content-length'] = 0;
@@ -267,30 +291,34 @@ class XeroOAuth
                 'curlWrite'
             ));
         }
-        
+
         switch ($this->method) {
             case 'GET':
+                $contentLength = 0;
                 break;
             case 'POST':
                 curl_setopt($c, CURLOPT_POST, TRUE);
-                $post_body = urlencode($this->xml);
-        		curl_setopt($c, CURLOPT_POSTFIELDS, $post_body);
-        		$this->request_params['xml'] = $this->xml;
-                
+                $post_body = $this->safe_encode($this->xml);
+                curl_setopt($c, CURLOPT_POSTFIELDS, $post_body);
+                $this->request_params['xml'] = $post_body;
+                $contentLength = strlen($post_body);
+
                 break;
             case 'PUT':
                 $fh = fopen('php://memory', 'w+');
-                fwrite($fh, $this->xml);
+                $put_body = $this->safe_encode($this->xml);
+                fwrite($fh, $put_body);
                 rewind($fh);
                 curl_setopt($c, CURLOPT_PUT, true);
                 curl_setopt($c, CURLOPT_INFILE, $fh);
-                curl_setopt($c, CURLOPT_INFILESIZE, strlen($this->xml));
-                
+                curl_setopt($c, CURLOPT_INFILESIZE, strlen($put_body));
+                $contentLength = strlen($put_body);
+
                 break;
             default:
                 curl_setopt($c, CURLOPT_CUSTOMREQUEST, $this->method);
         }
-        
+
         if (!empty($this->request_params)) {
             // if not doing multipart we need to implode the parameters
             if (!$this->config['multipart']) {
@@ -303,22 +331,22 @@ class XeroOAuth
         } else {
             // CURL will set length to -1 when there is no data
             $this->headers['Content-Type']   = '';
-            $this->headers['Content-Length'] = '';
+            $this->headers['Content-Length'] = $contentLength;
         }
-        
+
         $this->headers['Expect'] = '';
-        
+
         if (!empty($this->headers)) {
             foreach ($this->headers as $k => $v) {
                 $headers[] = trim($k . ': ' . $v);
             }
             curl_setopt($c, CURLOPT_HTTPHEADER, $headers);
         }
-        
+
         if (isset($this->config['prevent_request']) && false == $this->config['prevent_request'])
             return;
-        
-        
+
+
         // do it!
         $response = curl_exec($c);
         if ($response === false) {
@@ -327,11 +355,11 @@ class XeroOAuth
         } else {
             $code = curl_getinfo($c, CURLINFO_HTTP_CODE);
         }
-        
+
         $info = curl_getinfo($c);
-        
+
         curl_close($c);
-        
+
         // store the response
         $this->response['code']     = $code;
         $this->response['response'] = $response;
@@ -339,13 +367,13 @@ class XeroOAuth
         $this->response['format'] = $this->format;
         return $code;
     }
-    
+
     function MakeRequest($endpoint, $parameters, $action, $data, $app_type, $format = "xml")
     {
         $oauthObject = new OAuthSimple();
-        
+
         # Set some standard curl options....
-        
+
         $useragent                       = USER_AGENT;
         $useragent                       = isset($useragent) ? USER_AGENT : 'XeroOAuth-PHP';
         $options[CURLOPT_USERAGENT]      = $useragent;
@@ -353,9 +381,9 @@ class XeroOAuth
         $options[CURLOPT_RETURNTRANSFER] = 1;
         $options[CURLOPT_SSL_VERIFYHOST] = 0;
         $options[CURLOPT_SSL_VERIFYPEER] = 0;
-        
+
     }
-    
+
     /**
      * Make an HTTP request using this library. This method doesn't return anything.
      * Instead the response should be inspected directly.
@@ -364,13 +392,13 @@ class XeroOAuth
      * @param string $url the request URL without query string parameters
      * @param array  $params the request parameters as an array of key=value pairs
      * @param string $format the format of the response. Default json. Set to an empty string to exclude the format
-     
+
      */
     function request($method, $url, $params = array(), $xml = "", $format = 'xml')
     {
-    	// removed these as function parameters for now
-    	$useauth = true; $multipart = false;
-        
+        // removed these as function parameters for now
+        $useauth = true; $multipart = false;
+
         if (isset($format)) {
             switch ($format) {
                 case "pdf":
@@ -385,13 +413,17 @@ class XeroOAuth
                     break;
             }
         }
-        
+
+        if($params['If-Modified-Since'])
+         $modDate = "If-Modified-Since: "  . $params['If-Modified-Since'];
+             $this->headers['If-Modified-Since'] = $params['If-Modified-Since'];
+            
         if ($xml !== "")
             $this->xml = $xml;
-            
+
         if($method == "POST")
-        	$params['xml'] = $xml;
-        
+            $params['xml'] = $xml;
+
         $this->prepare_method($method);
         $this->config['multipart'] = $multipart;
         $this->url                 = $url;
@@ -409,21 +441,21 @@ class XeroOAuth
                 'signatures' => $this->config
             ));
         }
-        
+
         catch (Exception $e) {
             $errorMessage = $e->getMessage();
         }
         $this->format = $format;
-        
+
         $curlRequest = $this->curlit();
-        
+
         if ($this->response['code'] == 401 && isset($this->config['session_handle'])) {
             if ((strpos($this->response['response'], "oauth_problem=token_expired") !== false)) {
                 $this->response['helper'] = "TokenExpired";
             } else {
                 $this->response['helper'] = "TokenFatal";
             }
-            
+
         }
         if ($this->response['code'] == 403) {
             $errorMessage               = "It looks like your Xero Entrust cert issued by Xero is either invalid or has expired. See http://developer.xero.com/api-overview/http-response-codes/#403 for more";
@@ -436,11 +468,11 @@ class XeroOAuth
             $this->response['response'] = $errorMessage;
             $this->response['helper']   = "SetupIssue";
         }
-        
-        
+
+
         return $this->response;
     }
-    
+
     /**
      * Convert the response into usable data
      *
@@ -450,7 +482,7 @@ class XeroOAuth
      */
     function parseResponse($response, $format)
     {
-        
+
         if (isset($format)) {
             switch ($format) {
                 case "pdf":
@@ -465,9 +497,9 @@ class XeroOAuth
             }
         }
         return $theResponse;
-        
+
     }
-    
+
     /**
      * Utility function to create the request URL in the requested format
      *
@@ -476,7 +508,7 @@ class XeroOAuth
      */
     function url($request, $api = "core")
     {
-        
+
         if ($request == "RequestToken") {
             $this->config['host'] = $this->config['site'] . '/oauth/';
         } elseif ($request == "Authorize") {
@@ -497,16 +529,16 @@ class XeroOAuth
             }
             $this->config['host'] = $this->config['xero_url'] . $api_stem . '/' . $api_version . '/';
         }
-        
-        
-        
-        
+
+
+
+
         return implode(array(
             $this->config['host'],
             $request
         ));
     }
-    
+
     /**
      * Refreshes the access token for partner API type applications
      *
@@ -521,16 +553,16 @@ class XeroOAuth
             'oauth_session_handle' => $sessionHandle
         ));
         if ($this->response['code'] == 200) {
-            
+
             $response = $this->extract_params($this->response['response']);
-            
+
             return $response;
         } else {
             $this->response['helper'] = "TokenFatal";
             return $this->response;
         }
     }
-    
+
     /**
      * Returns the current URL. This is instead of PHP_SELF which is unsafe
      *
@@ -540,17 +572,17 @@ class XeroOAuth
     function php_self($dropqs = true)
     {
         $url = sprintf('%s://%s%s', empty($_SERVER['HTTPS']) ? (@$_SERVER['SERVER_PORT'] == '443' ? 'https' : 'http') : 'http', $_SERVER['SERVER_NAME'], $_SERVER['REQUEST_URI']);
-        
+
         $parts = parse_url($url);
-        
+
         $port   = $_SERVER['SERVER_PORT'];
         $scheme = $parts['scheme'];
         $host   = $parts['host'];
         $path   = @$parts['path'];
         $qs     = @$parts['query'];
-        
+
         $port or $port = ($scheme == 'https') ? '443' : '80';
-        
+
         if (($scheme == 'https' && $port != '443') || ($scheme == 'http' && $port != '80')) {
             $host = "$host:$port";
         }
@@ -560,20 +592,20 @@ class XeroOAuth
         else
             return $url;
     }
-    
+
     /*
      *
      * Run some basic checks on our config options etc to make sure all is ok
-     * 
+     *
      */
-    
+
     function diagnostics()
     {
-    	
+
         $testOutput = array();
         if ($this->config['application_type'] == 'Partner') {
             if (!file_get_contents($this->config['curl_ssl_cert'])) {
-                $testOutput['ssl_cert_error'] = "Can't read the Xero Entrust cert. You need one for partner API applications. http://developer.xero.com/partner-applications-certificates-explained/ \n";
+                $testOutput['ssl_cert_error'] = "Can't read the Xero Entrust cert. You need one for partner API applications. http://developer.xero.com/documentation/getting-started/partner-applications/ \n";
             } else {
                 $data      = openssl_x509_parse(file_get_contents($this->config['curl_ssl_cert']));
                 $validFrom = date('Y-m-d H:i:s', $data['validFrom_time_t']);
@@ -586,11 +618,11 @@ class XeroOAuth
                 }
             }
         }
-        
+
             if ($this->config['application_type'] == 'Partner' || $this->config['application_type'] == 'Private') {
-            	
+
                 if (!file_exists($this->config['rsa_public_key']))
-                    $testOutput['rsa_cert_error'] = "Can't read the self-signed SSL cert. Private and Partner API applications require a self-signed X509 cert http://developer.xero.com/api-overview/setup-an-application/#certs \n";
+                    $testOutput['rsa_cert_error'] = "Can't read the self-signed SSL cert. Private and Partner API applications require a self-signed X509 cert http://developer.xero.com/documentation/advanced-docs/public-private-keypair/ \n";
                 if (file_exists($this->config['rsa_public_key'])) {
                     $data      = openssl_x509_parse(file_get_contents($this->config['rsa_public_key']));
                     $validFrom = date('Y-m-d H:i:s', $data['validFrom_time_t']);
@@ -603,7 +635,7 @@ class XeroOAuth
                     }
                 }
                 if (!file_exists($this->config['rsa_private_key']))
-                    $testOutput['rsa_cert_error'] = "Can't read the self-signed cert key. Check your rsa_private_key config variable. Private and Partner API applications require a self-signed X509 cert http://developer.xero.com/api-overview/setup-an-application/#certs \n";
+                    $testOutput['rsa_cert_error'] = "Can't read the self-signed cert key. Check your rsa_private_key config variable. Private and Partner API applications require a self-signed X509 cert http://developer.xero.com/documentation/advanced-docs/public-private-keypair/ \n";
                 if (file_exists($this->config['rsa_private_key'])) {
                     $cert_content     = file_get_contents($this->config['rsa_public_key']);
                     $priv_key_content = file_get_contents($this->config['rsa_private_key']);
@@ -611,14 +643,14 @@ class XeroOAuth
                         $testOutput['rsa_cert_error'] = "Application certificate and key do not match \n";
                     ;
                 }
-                
+
             }
-            
-            
-        
-        
+
+
+
+
         return $testOutput;
-        
+
     }
-    
+
 }

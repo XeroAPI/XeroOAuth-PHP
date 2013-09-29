@@ -10,19 +10,19 @@ define('BASE_PATH', '.');
  * Define which app type you are using:
  * Private - private app method
  * Public - standard public app method
- * Partner - partner app method
+ * Public - partner app method
  */
-define("XRO_APP_TYPE", "Partner");
+define("XRO_APP_TYPE", "Public");
 
 /**
  * Set a user agent string that matches your application name as set in the Xero developer centre
  */
-$useragent = "Ronan Private Test";
+$useragent = "Xero-OAuth-PHP Public";
 
 /**
  * Set your callback url or set 'oob' if none required
  */
-define("OAUTH_CALLBACK", 'http://localhost/XeroOAuth-PHP-Tests/partner.php');
+define("OAUTH_CALLBACK", 'http://localhost/XeroOAuth-PHP/public.php');
 
 /**
  * Application specific settings
@@ -37,7 +37,7 @@ include 'tests/testRunner.php';
 
 $signatures = array(
     'consumer_key' => 'YOURCONSUMERKEY',
-    'shared_secret' => 's',
+    'shared_secret' => 'YOURSECRET',
     // API versions
     'core_version' => '2.0',
     'payroll_version' => '1.0'
@@ -99,9 +99,10 @@ if ($checkErrors > 0) {
         }
         // start the OAuth dance
     } elseif (isset($_REQUEST['authenticate']) || isset($_REQUEST['authorize'])) {
-       $params = array(
+        $params = array(
             'oauth_callback' => OAUTH_CALLBACK
         );
+
 
 
 
