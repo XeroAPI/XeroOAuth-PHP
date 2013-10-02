@@ -6,3 +6,4 @@
 *.p12
 *.cer
 *.pfx
+*.DS_Store

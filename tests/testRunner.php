@@ -20,7 +20,11 @@ function testLinks()
 			<li><a href="?invoice=1&method=put">Invoices PUT</a></li>
 			<li><a href="?invoice=1&method=post">Invoices POST</a></li>
 			<li><a href="?invoice=pdf">Invoice PDF</a></li>
-			<li><a href="?trialbalance=1">Trial Balance</a></li>';
+			<li><a href="?trialbalance=1">Trial Balance</a></li>
+            <li><a href="?payment=1">Payments GET</a></li>
+            <li><a href="?payment=1&method=put">Payments PUT</a></li>
+            <li><a href="?payment=1&method=post">Payments POST</a></li>
+            ';
     
   if (XRO_APP_TYPE == 'Partner')   echo '<li><a href="?refresh=1">Refresh access token</a></li>';
     if (XRO_APP_TYPE !== 'Private' && isset($_SESSION['access_token'])) {

@@ -270,5 +270,66 @@ if(isset($_REQUEST['banktransactions'])){
     outputError($XeroOAuth); 
   }
   }
+
+  if(isset($_REQUEST['payment'])){
+	if(!isset($_REQUEST['method'])){
+  $response = $XeroOAuth->request('GET', $XeroOAuth->url('Payments', 'core'), array());
+  if ($XeroOAuth->response['code'] == 200) {
+    $payments = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+    echo "There are " . count($payments->Payments[0]). " payments in this Xero organisation, the first one is: </br>";
+    pr($payments->Payments[0]->Payment);
+  } else {
+    outputError($XeroOAuth); 
+  }
+  }elseif(isset($_REQUEST['method']) && $_REQUEST['method'] == "put" ){
+		$xml = "<Payments>
+				  <Payment>
+				    <Invoice>
+				      <InvoiceNumber>ORC1032</InvoiceNumber>
+				    </Invoice>
+				    <Account>
+				      <Code>090</Code>
+				    </Account>
+				    <Date>2013-09-11T00:00:00</Date>
+				    <Amount>10.00</Amount>
+				  </Payment>
+				</Payments>";
+		$response = $XeroOAuth->request('PUT', $XeroOAuth->url('Payments', 'core'), array(), $xml);
+		  if ($XeroOAuth->response['code'] == 200) {
+		    $payment = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+		    echo "" . count($payment->Payments[0]). " payment created in this Xero organisation.";
+		    if(count($payment->Payments[0])>0){
+		    	echo "The first one is: </br>";
+		    	pr($payment->Payments[0]->Payment);
+		    }
+		  } else {
+		    outputError($XeroOAuth); 
+		  }
+	}elseif(isset($_REQUEST['method']) && $_REQUEST['method'] == "post" ){
+		$xml = "<Payments>
+				  <Payment>
+				    <Invoice>
+				      <InvoiceNumber>ORC1032</InvoiceNumber>
+				    </Invoice>
+				    <Account>
+				      <Code>090</Code>
+				    </Account>
+				    <Date>2013-09-11T00:00:00</Date>
+				    <Amount>9.00</Amount>
+				  </Payment>
+				</Payments>";
+		$response = $XeroOAuth->request('PUT', $XeroOAuth->url('Payments', 'core'), array(), $xml);
+		  if ($XeroOAuth->response['code'] == 200) {
+		    $payment = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+		    echo "" . count($payment->Payments[0]). " payment created in this Xero organisation.";
+		    if(count($payment->Payments[0])>0){
+		    	echo "The first one is: </br>";
+		    	pr($payment->Payments[0]->Payment);
+		    }
+		  } else {
+		    outputError($XeroOAuth); 
+		  }
+	}
+  }
   
 }
