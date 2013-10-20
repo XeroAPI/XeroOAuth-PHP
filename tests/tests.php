@@ -91,7 +91,7 @@ if ( isset($_REQUEST['wipe'])) {
             } else {
                 outputError($XeroOAuth);
             }
-        } elseif (isset($_REQUEST['method']) && $_REQUEST['method'] == "put" ) {
+        } elseif (isset($_REQUEST['method']) && $_REQUEST['method'] == "put" && $_REQUEST['invoice']== 1 ) {
             $xml = "<Invoices>
                       <Invoice>
                         <Type>ACCREC</Type>
@@ -153,6 +153,33 @@ if ( isset($_REQUEST['wipe'])) {
             } else {
                 outputError($XeroOAuth);
             }
+        }elseif (isset($_REQUEST['method']) && $_REQUEST['method'] == "put" && $_REQUEST['invoice']=="attachment" ) {
+	        $response = $XeroOAuth->request('GET', $XeroOAuth->url('Invoices', 'core'), array('Where' => 'Status=="DRAFT"'));
+	            if ($XeroOAuth->response['code'] == 200) {
+	                $invoices = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+	                echo "There are " . count($invoices->Invoices[0]). " draft invoices in this Xero organisation, the first one is: </br>";
+	                pr($invoices->Invoices[0]->Invoice);
+	                if ($_REQUEST['invoice']=="attachment") {
+	                	$attachmentFile = file_get_contents('http://i.imgur.com/mkDFLf2.png');
+
+	                    $response = $XeroOAuth->request('PUT', $XeroOAuth->url('Invoice/'.$invoices->Invoices[0]->Invoice->InvoiceID.'/Attachments/image.png', 'core'), array(), $attachmentFile, 'file');
+	                		if ($XeroOAuth->response['code'] == 200) {
+	                			echo $attachmentFile;
+                				$invoice = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+                					echo "" . count($invoice->Invoices[0]). " invoice created in this Xero organisation.";
+                						if (count($invoice->Invoices[0])>0) {
+                    					echo "The first one is: </br>";
+                    					pr($invoice->Invoices[0]->Invoice);
+                						}
+				            } else {
+				                outputError($XeroOAuth);
+				            }
+	                    echo "PDF copy downloaded, check your the directory of this script.</br>";
+	                }
+	            } else {
+	                outputError($XeroOAuth);
+	            }
+           
         }
 
 
@@ -239,13 +266,14 @@ if (isset($_REQUEST['invoicesmodified'])) {
        } elseif(isset($_REQUEST['method']) && $_REQUEST['method'] == "post" ){
            $xml = "<Contacts>
                      <Contact>
-                       <Name>Jameson + Co</Name>
+                       <Name>Matthew and son</Name>
                        <EmailAddress>emailaddress@yourdomain.com</EmailAddress>
-                       <SkypeUserName>Sîne klâwen durh die wolken sint geslagen</SkypeUserName>
-                       <FirstName>Chester</FirstName>
-                       <LastName>d’Arenberg</LastName>
+                       <SkypeUserName>matthewson_test99</SkypeUserName>
+                       <FirstName>Matthew</FirstName>
+                       <LastName>Masters</LastName>
                      </Contact>
-                   </Contacts>";
+                   </Contacts>
+                   ";
            $response = $XeroOAuth->request('POST', $XeroOAuth->url('Contacts', 'core'), array(), $xml);
            if ($XeroOAuth->response['code'] == 200) {
                $contact = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
@@ -297,5 +325,6 @@ if (isset($_REQUEST['invoicesmodified'])) {
            outputError($XeroOAuth);
        }
    }
+   
 
 }

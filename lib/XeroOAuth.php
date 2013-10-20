@@ -63,7 +63,7 @@ class XeroOAuth
         );
         $this->_xero_curl_options     = array( // you probably don't want to change any of these curl values
             'curl_connecttimeout' => 30,
-            'curl_timeout' => 10,
+            'curl_timeout' => 20,
              // for security you may want to set this to TRUE. If you do you need
             // to install the servers certificate in your local certificate store.
             'curl_ssl_verifypeer' => 2,
@@ -306,7 +306,11 @@ class XeroOAuth
                 break;
             case 'PUT':
                 $fh = fopen('php://memory', 'w+');
-                $put_body = $this->safe_encode($this->xml);
+                if($this->format=="file"){
+                	$put_body = $this->xml;
+                }else{
+                	$put_body = $this->safe_encode($this->xml);
+                }
                 fwrite($fh, $put_body);
                 rewind($fh);
                 curl_setopt($c, CURLOPT_PUT, true);

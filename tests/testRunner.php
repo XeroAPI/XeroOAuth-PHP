@@ -18,9 +18,10 @@ function testLinks()
                 <li><a href="?payruns=1">Payroll Payruns GET</a></li>
                 <li><a href="?invoice=1">Invoices GET</a></li>
                 <li><a href="?invoicesfilter=1">Invoices GET - Where Contact Name contains "Martin"</a></li>
-                 <li><a href="?invoicesmodified=1">Invoices GET - If-Modified-Since</a></li>
+                <li><a href="?invoicesmodified=1">Invoices GET - If-Modified-Since</a></li>
                 <li><a href="?invoice=1&method=put">Invoices PUT</a></li>
                 <li><a href="?invoice=1&method=post">Invoices POST</a></li>
+                <li><a href="?invoice=attachment&method=put">Invoice attachment PUT</a></li>
                 <li><a href="?invoice=pdf">Invoice PDF</a></li>
                 <li><a href="?trialbalance=1">Trial Balance</a></li>';
 
