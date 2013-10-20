@@ -22,7 +22,7 @@ $useragent = "Ronan Private Test";
 /**
  * Set your callback url or set 'oob' if none required
  */
-define("OAUTH_CALLBACK", 'http://localhost/XeroOAuth-PHP-Tests/partner.php');
+define("OAUTH_CALLBACK", 'http://localhost/XeroOAuth-PHP/partner.php');
 
 /**
  * Application specific settings
