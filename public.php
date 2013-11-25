@@ -21,6 +21,9 @@ $useragent = "Xero-OAuth-PHP Public";
 
 /**
  * Set your callback url or set 'oob' if none required
+ * Make sure you've set the callback URL in the Xero Dashboard
+ * Go to https://api.xero.com/Application/List and select your application 
+ * Under OAuth callback domain enter  localhost or whatever domain you are using.
  */
 define("OAUTH_CALLBACK", 'http://localhost/XeroOAuth-PHP/public.php');
 
