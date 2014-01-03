@@ -500,7 +500,7 @@ class XeroOAuth
         if (isset($format)) {
             switch ($format) {
                 case "pdf":
-                    $theResponse = json_decode($response);
+                    $theResponse = $response;
                     break;
                 case "json":
                     $theResponse = json_decode($response);
