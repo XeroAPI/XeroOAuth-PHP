@@ -146,7 +146,7 @@ if ( isset($_REQUEST['wipe'])) {
                        </LineItems>
                      </Invoice>
                    </Invoices>";
-            $response = $XeroOAuth->request('POST', $XeroOAuth->url('Invoices', 'core'), '', $xml);
+            $response = $XeroOAuth->request('POST', $XeroOAuth->url('Invoices', 'core'), array(), $xml);
             if ($XeroOAuth->response['code'] == 200) {
                 $invoice = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
                 echo "" . count($invoice->Invoices[0]). " invoice created in this Xero organisation.";
