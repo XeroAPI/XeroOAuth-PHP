@@ -146,13 +146,14 @@ if ( isset($_REQUEST['wipe'])) {
                        </LineItems>
                      </Invoice>
                    </Invoices>";
-            $response = $XeroOAuth->request('PUT', $XeroOAuth->url('Invoices', 'core'), array(), $xml);
+            $response = $XeroOAuth->request('POST', $XeroOAuth->url('Invoices', 'core'), '', $xml);
             if ($XeroOAuth->response['code'] == 200) {
                 $invoice = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
                 echo "" . count($invoice->Invoices[0]). " invoice created in this Xero organisation.";
                 if (count($invoice->Invoices[0])>0) {
                     echo "The first one is: </br>";
                     pr($invoice->Invoices[0]->Invoice);
+                    outputError($XeroOAuth);
                 }
             } else {
                 outputError($XeroOAuth);
