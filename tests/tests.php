@@ -82,11 +82,15 @@ if ( isset($_REQUEST['wipe'])) {
                 pr($invoices->Invoices[0]->Invoice);
                 if ($_REQUEST['invoice']=="pdf") {
                     $response = $XeroOAuth->request('GET', $XeroOAuth->url('Invoice/'.$invoices->Invoices[0]->Invoice->InvoiceID, 'core'), array(), "", 'pdf');
-                    $myFile = $invoices->Invoices[0]->Invoice->InvoiceID.".pdf";
-                    $fh = fopen($myFile, 'w') or die("can't open file");
-                    fwrite($fh, $XeroOAuth->response['response']);
-                    fclose($fh);
-                    echo "PDF copy downloaded, check your the directory of this script.</br>";
+                    if ($XeroOAuth->response['code'] == 200) {
+                        $myFile = $invoices->Invoices[0]->Invoice->InvoiceID.".pdf";
+                        $fh = fopen($myFile, 'w') or die("can't open file");
+                        fwrite($fh, $XeroOAuth->response['response']);
+                        fclose($fh);
+                        echo "PDF copy downloaded, check your the directory of this script.</br>";
+                    } else {
+                        outputError($XeroOAuth);
+                    }
                 }
             } else {
                 outputError($XeroOAuth);
