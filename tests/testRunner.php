@@ -50,7 +50,7 @@ function persistSession($response)
     if (isset($response)) {
         $_SESSION['access_token']       = $response['oauth_token'];
         $_SESSION['oauth_token_secret'] = $response['oauth_token_secret'];
-        $_SESSION['session_handle']     = $response['oauth_session_handle'];
+      	if(isset($_SESSION['session_handle']))  $_SESSION['session_handle']     = $response['oauth_session_handle'];
     } else {
         return false;
     }
@@ -64,7 +64,7 @@ function persistSession($response)
  */
 function retrieveSession()
 {
-    if (isset($_SESSION)) {
+    if (isset($_SESSION['access_token'])) {
         $response['oauth_token']            =    $_SESSION['access_token'];
         $response['oauth_token_secret']     =    $_SESSION['oauth_token_secret'];
         $response['oauth_session_handle']   =    $_SESSION['session_handle'];

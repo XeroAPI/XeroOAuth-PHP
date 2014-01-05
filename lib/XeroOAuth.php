@@ -585,7 +585,7 @@ class XeroOAuth {
 	 *        	whether to drop the querystring or not. Default true
 	 * @return string the current URL
 	 */
-	function php_self($dropqs = true) {
+	public static function php_self($dropqs = true) {
 		$url = sprintf ( '%s://%s%s', empty ( $_SERVER ['HTTPS'] ) ? (@$_SERVER ['SERVER_PORT'] == '443' ? 'https' : 'http') : 'http', $_SERVER ['SERVER_NAME'], $_SERVER ['REQUEST_URI'] );
 		
 		$parts = parse_url ( $url );

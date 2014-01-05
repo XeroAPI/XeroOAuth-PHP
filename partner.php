@@ -102,6 +102,8 @@ if ($checkErrors > 0) {
 		$response = $XeroOAuth->request ( 'GET', $XeroOAuth->url ( 'RequestToken', '' ), $params );
 		
 		if ($XeroOAuth->response ['code'] == 200) {
+			
+			$scope = "";
 			// $scope = 'payroll.payrollcalendars,payroll.superfunds,payroll.payruns,payroll.payslip,payroll.employees,payroll.TaxDeclaration';
 			if ($_REQUEST ['authenticate'] > 1)
 				$scope = 'payroll.employees,payroll.payruns';
