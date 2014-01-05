@@ -1,5 +1,8 @@
 <?php
-
+if (isset($_REQUEST)){
+	if (!isset($_REQUEST['where'])) $_REQUEST['where'] = "";
+}
+	
 if ( isset($_REQUEST['wipe'])) {
   session_destroy();
   header("Location: {$here}");
