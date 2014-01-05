@@ -99,10 +99,9 @@ Understanding the type of message you are getting from the API could be useful. 
 
 ## TODO
 
-1. Example of attaching a file
-2. Reading a value from a report
-3. Better WHERE and ORDER examples
-4. Public API application example
+1. Reading a value from a report
+2. Better WHERE and ORDER examples
+
 
 ## License & Credits
 
