@@ -178,7 +178,7 @@ if ( isset($_REQUEST['wipe'])) {
 				            } else {
 				                outputError($XeroOAuth);
 				            }
-	                    echo "PDF copy downloaded, check your the directory of this script.</br>";
+	                    echo "PDF copy downloaded, check the directory of this script for the file.</br>";
 	                }
 	            } else {
 	                outputError($XeroOAuth);
