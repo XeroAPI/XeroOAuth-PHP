@@ -331,6 +331,7 @@ class XeroOAuth {
 				curl_setopt ( $c, CURLOPT_INFILE, $fh );
 				curl_setopt ( $c, CURLOPT_INFILESIZE, strlen ( $put_body ) );
 				$contentLength = strlen ( $put_body );
+				fclose($fh);
 				
 				break;
 			default :
