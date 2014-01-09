@@ -11,6 +11,12 @@ the Xero API has one of the more advanced implementations (RSA-SHA1, client ssl 
 This library is designed to get a developer up and running quickly with the OAuth authentication layer, but there will be some customisation of its implementation required before it can be used in a
 production environment.
 
+## Requirements
+* PHP 5+
+* php_curl extension
+* php_openssl extension
+
+
 ## Setup
 To get setup, you will need to modify the values in the _config.php file to your own requirements and application settings
 Special options for Partner applications - should be commented out for non-partner applications
