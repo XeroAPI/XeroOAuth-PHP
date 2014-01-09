@@ -319,7 +319,7 @@ class XeroOAuth {
 				
 				break;
 			case 'PUT' :
-				$fh = fopen ( 'php://memory', 'w+' );
+				$fh = tmpfile();
 				if ($this->format == "file") {
 					$put_body = $this->xml;
 				} else {
