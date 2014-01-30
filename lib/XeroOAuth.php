@@ -587,7 +587,7 @@ class XeroOAuth {
 	 * @return string the current URL
 	 */
 	public static function php_self($dropqs = true) {
-		$url = sprintf ( '%s://%s%s', empty ( $_SERVER ['HTTPS'] ) ? (@$_SERVER ['SERVER_PORT'] == '443' ? 'https' : 'http') : 'http', $_SERVER ['SERVER_NAME'], $_SERVER ['REQUEST_URI'] );
+		$url = sprintf ( '%s://%s%s', empty ( $_SERVER ['HTTPS'] ) ? (@$_SERVER ['SERVER_PORT'] == '443' ? 'https' : 'http') : 'https', $_SERVER ['SERVER_NAME'], $_SERVER ['REQUEST_URI'] );
 		
 		$parts = parse_url ( $url );
 		
