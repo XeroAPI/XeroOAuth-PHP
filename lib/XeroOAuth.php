@@ -331,6 +331,7 @@ class XeroOAuth {
 				curl_setopt ( $c, CURLOPT_INFILE, $fh );
 				curl_setopt ( $c, CURLOPT_INFILESIZE, strlen ( $put_body ) );
 				$contentLength = strlen ( $put_body );
+				fclose($fh);
 				
 				break;
 			default :
@@ -376,8 +377,6 @@ class XeroOAuth {
 		$info = curl_getinfo ( $c );
 		
 		curl_close ( $c );
-
-		if($this->method=="PUT")	fclose($fh);
 		
 		// store the response
 		$this->response ['code'] = $code;
@@ -412,7 +411,7 @@ class XeroOAuth {
 	 * @param array $params
 	 *        	the request parameters as an array of key=value pairs
 	 * @param string $format
-	 *        	the format of the response. Default xml. Set to an empty string to exclude the format
+	 *        	the format of the response. Default json. Set to an empty string to exclude the format
 	 *        	
 	 */
 	function request($method, $url, $params = array(), $xml = "", $format = 'xml') {
