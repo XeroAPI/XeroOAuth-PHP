@@ -13,13 +13,13 @@ production environment.
 
 ## Requirements
 * PHP 5+
-* php_curl extension
-* php_openssl extension
+* php\_curl extension
+* php\_openssl extension
 
 
 ## Setup
-To get setup, you will need to modify the values in the _config.php file to your own requirements and application settings
-Special options for Partner applications - should be commented out for non-partner applications
+To get setup, you will need to modify the values in the \_config.php file to your own requirements and application settings.
+_Special options for Partner applications_ should be commented out for non-partner applications.
 
 ## Usage
 
@@ -38,7 +38,7 @@ The request function lies at the core of any communication with the API. There a
 * Format: response format (currently xml, json & pdf are supported). Note that PDF is not supported for all endpoints
 
 #### Generate a URL
-For partner API applications where the 30 minute access tokens can be programatically refreshed via the API, you can use the refreshToken function:
+Create a properly formatted request URL.
 
     url($endpoint, $api)
 
@@ -61,7 +61,7 @@ For public and partner API type applications using the 3-legged OAuth process, w
     url("Authorize", '') . "?oauth_token=".$oauth_token."&scope=" . $scope;
 
 ###### Appendages
-* oauth_token: this is a request token generated in a prior RequestToken call
+* oauth\_token: this is a request token generated in a prior RequestToken call
 * scope: the Payroll API is a permissioned API and required a comma separated list of endpoints the application is requesting access to e.g. $scope = 'payroll.payrollcalendars,payroll.superfunds,payroll.payruns,payroll.payslip,payroll.employees';
 
 

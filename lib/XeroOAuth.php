@@ -331,7 +331,6 @@ class XeroOAuth {
 				curl_setopt ( $c, CURLOPT_INFILE, $fh );
 				curl_setopt ( $c, CURLOPT_INFILESIZE, strlen ( $put_body ) );
 				$contentLength = strlen ( $put_body );
-				fclose($fh);
 				
 				break;
 			default :
@@ -377,6 +376,9 @@ class XeroOAuth {
 		$info = curl_getinfo ( $c );
 		
 		curl_close ( $c );
+		if (isset ( $fh )) {
+			fclose( $fh );
+		}
 		
 		// store the response
 		$this->response ['code'] = $code;
