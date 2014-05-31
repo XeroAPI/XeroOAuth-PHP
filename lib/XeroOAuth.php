@@ -441,8 +441,10 @@ class XeroOAuth {
 			$this->headers ['If-Modified-Since'] = $params ['If-Modified-Since'];
 		}
 		
-		if ($xml !== "")
+		if ($xml !== "") {
+			$xml = trim($xml);
 			$this->xml = $xml;
+		}
 		
 		if ($method == "POST")
 			$params ['xml'] = $xml;
