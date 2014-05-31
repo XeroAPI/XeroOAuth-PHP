@@ -4,7 +4,7 @@ require 'lib/XeroOAuth.php';
 /**
  * Define for file includes
  */
-define ( 'BASE_PATH', '.' );
+define ( 'BASE_PATH', dirname(__FILE__) );
 
 /**
  * Define which app type you are using:
