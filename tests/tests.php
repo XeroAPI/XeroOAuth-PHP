@@ -129,6 +129,37 @@ if ( isset($_REQUEST['wipe'])) {
             } else {
                 outputError($XeroOAuth);
             }
+        } elseif (isset($_REQUEST['method']) && $_REQUEST['method'] == "4dp" && $_REQUEST['invoice']== 1 ) {
+            $xml = "<Invoices>
+                      <Invoice>
+                        <Type>ACCREC</Type>
+                        <Contact>
+                          <Name>Steve Buscemi</Name>
+                        </Contact>
+                        <Date>2014-05-13T00:00:00</Date>
+                        <DueDate>2014-05-20T00:00:00</DueDate>
+                        <LineAmountTypes>Exclusive</LineAmountTypes>
+                        <LineItems>
+                          <LineItem>
+                            <Description>Monthly rental for property at 56b Wilkins Avenue</Description>
+                            <Quantity>4.3400</Quantity>
+                            <UnitAmount>395.6789</UnitAmount>
+                            <AccountCode>200</AccountCode>
+                          </LineItem>
+                        </LineItems>
+                      </Invoice>
+                    </Invoices>";
+            $response = $XeroOAuth->request('PUT', $XeroOAuth->url('Invoices', 'core'), array('unitdp' => '4'), $xml);
+            if ($XeroOAuth->response['code'] == 200) {
+                $invoice = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+                echo "" . count($invoice->Invoices[0]). " invoice created in this Xero organisation.";
+                if (count($invoice->Invoices[0])>0) {
+                    echo "The first one is: </br>";
+                    pr($invoice->Invoices[0]->Invoice);
+                }
+            } else {
+                outputError($XeroOAuth);
+            }
         } elseif (isset($_REQUEST['method']) && $_REQUEST['method'] == "post" ) {
             $xml = "<Invoices>
                       <Invoice>
