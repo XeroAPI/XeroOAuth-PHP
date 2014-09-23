@@ -452,15 +452,15 @@ class XeroOAuth {
 		$this->prepare_method ( $method );
 		$this->config ['multipart'] = $multipart;
 		$this->url = $url;
-		if (! isset ( $_REQUEST ['order'] ))
-			$_REQUEST ['order'] = "";
+		if (! isset ( $params['order'] ))
+			$params['order'] = "";
 		$oauthObject = new OAuthSimple ();
 		try {
 			$this->sign = $oauthObject->sign ( array (
 					'path' => $url,
 					'action' => $method,
 					'parameters' => array_merge ( $params, array (
-							'order' => urlencode ( $_REQUEST ['order'] ),
+							'order' => urlencode ( $params['order'] ),
 							'oauth_signature_method' => $this->config ['signature_method'] 
 					) ),
 					'signatures' => $this->config 
