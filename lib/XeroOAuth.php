@@ -27,6 +27,7 @@ class XeroOAuth {
 		$this->headers = array ();
 		$this->auto_fixed_time = false;
 		$this->buffer = null;
+		$this->request_params = array();
 		
 		if (! empty ( $config ['application_type'] )) {
 			switch ($config ['application_type']) {
@@ -235,29 +236,9 @@ class XeroOAuth {
 	 * @return void response data is stored in the class variable 'response'
 	 */
 	private function curlit() {
-		// method handling
-		switch ($this->method) {
-			case 'POST' :
-				
-				break;
-			default :
-				// GET, DELETE request so convert the parameters to a querystring
-				if (! empty ( $this->request_params )) {
-					foreach ( $this->request_params as $k => $v ) {
-						// Multipart params haven't been encoded yet.
-						// Not sure why you would do a multipart GET but anyway, here's the support for it
-						if ($this->config ['multipart']) {
-							$params [] = $k . '=' . $v;
-						} else {
-							$params [] = $this->safe_encode ( $k ) . '=' . $this->safe_encode ( $v );
-						}
-					}
-					$qs = implode ( '&', $params );
-					$this->url = strlen ( $qs ) > 0 ? $this->url . '?' . $qs : $this->url;
-					$this->request_params = array ();
-				}
-				break;
-		}
+		$this->headers = array ();
+		$this->request_params = array();
+	
 		
 		// configure curl
 		$c = curl_init ();
@@ -343,9 +324,9 @@ class XeroOAuth {
 				foreach ( $this->request_params as $k => $v ) {
 					$ps [] = "{$k}={$v}";
 				}
-				$this->request_params = implode ( '&', $ps );
+				$this->request_payload = implode ( '&', $ps );
 			}
-			curl_setopt ( $c, CURLOPT_POSTFIELDS, $this->request_params );
+			curl_setopt ( $c, CURLOPT_POSTFIELDS, $this->request_payload);
 		} else {
 			// CURL will set length to -1 when there is no data
 			$this->headers ['Content-Type'] = '';
@@ -452,15 +433,12 @@ class XeroOAuth {
 		$this->prepare_method ( $method );
 		$this->config ['multipart'] = $multipart;
 		$this->url = $url;
-		if (! isset ( $_REQUEST ['order'] ))
-			$_REQUEST ['order'] = "";
 		$oauthObject = new OAuthSimple ();
 		try {
 			$this->sign = $oauthObject->sign ( array (
 					'path' => $url,
 					'action' => $method,
 					'parameters' => array_merge ( $params, array (
-							'order' => urlencode ( $_REQUEST ['order'] ),
 							'oauth_signature_method' => $this->config ['signature_method'] 
 					) ),
 					'signatures' => $this->config 
