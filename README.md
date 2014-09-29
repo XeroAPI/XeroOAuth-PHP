@@ -105,9 +105,9 @@ Understanding the type of message you are getting from the API could be useful. 
 
 ## TODO
 
-- [] Reading a value from a report
+- [ ] Reading a value from a report
 - [x] Better WHERE and ORDER examples
-- [] Merge OAuthsimple changes for RSA-SHA1 back to parent repo
+- [ ] Merge OAuthsimple changes for RSA-SHA1 back to parent repo
 
 
 ## License & Credits
