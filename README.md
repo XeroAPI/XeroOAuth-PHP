@@ -105,8 +105,8 @@ Understanding the type of message you are getting from the API could be useful. 
 
 ## TODO
 
-1. Reading a value from a report
-2. Better WHERE and ORDER examples
+[] Reading a value from a report
+[x] Better WHERE and ORDER examples
 
 
 ## License & Credits
@@ -120,6 +120,10 @@ OAuthsimple.php contains minor adaptations from the OAuthSimple PHP class by [Un
 XeroOAuth class is based on code and structure derived from the [tmhOAuth](https://github.com/themattharris/tmhOAuth) library.
 
 ## Major change history
+
+#### 0.4 - 29th September 2014
+
+Merged a some pull requests, addressed an issue with multiple calls having signature validation issues.
 
 #### 0.3 - 3rd January 2014
 
