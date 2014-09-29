@@ -78,7 +78,7 @@ if ( isset($_REQUEST['wipe'])) {
     }
     if (isset($_REQUEST['invoice'])) {
         if (!isset($_REQUEST['method'])) {
-            $response = $XeroOAuth->request('GET', $XeroOAuth->url('Invoices', 'core'), array('order' => 'Total'));
+            $response = $XeroOAuth->request('GET', $XeroOAuth->url('Invoices', 'core'), array('order' => 'Total DESC'));
             if ($XeroOAuth->response['code'] == 200) {
                 $invoices = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
                 echo "There are " . count($invoices->Invoices[0]). " invoices in this Xero organisation, the first one is: </br>";
