@@ -1,0 +1,23 @@
+{
+    "name": "sebastiansibelle/XeroOAuth-PHP",
+    "description": "PHP wrapper for the Xero API V2",
+    "keywords": ["xero","php","api","wrapper"],
+    "homepage": "https://github.com/sebastiansibelle/XeroOAuth-PHP",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sebastian Sibelle",
+            "email": "sebastiansibelle@gmail.com",
+            "homepage": "http://sebastiansibelle.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+    },
+    "autoload": {
+        "psr-0": {
+            "XeroOAuth": "lib"
+        }
+    }
+}
