@@ -1,0 +1,12 @@
+{
+    "name": "XeroAPI/XeroOAuth-PHP",
+    "description": "PHP class for the Xero API V2 http://developer.xero.com/getting-started/code/php/",
+    "require": {
+        "php": ">=5",
+        "lib-curl": "*",
+        "lib-openssl": "*"
+    },
+    "autoload": {
+        "classmap": ["lib/"]
+    }
+}
