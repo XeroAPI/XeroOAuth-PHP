@@ -236,7 +236,6 @@ class XeroOAuth {
 	 * @return void response data is stored in the class variable 'response'
 	 */
 	private function curlit() {
-		$this->headers = array ();
 		$this->request_params = array();
 	
 		
