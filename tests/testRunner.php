@@ -7,6 +7,7 @@ function testLinks()
         echo '<ul>
                 <li><a href="?=1">Home</a></li>
                 <li><a href="?organisation=1">Organisation</a></li>
+                <li><a href="?organisation=1&request=json">Organisation (JSON response)</a></li>
                 <li><a href="?accounts=1">Accounts GET</a></li>
                 <li><a href="?accountsfilter=1">Accounts GET - Where Type is BANK</a></li>
                 <li><a href="?banktransactions=1">BankTransactions GET</a></li>

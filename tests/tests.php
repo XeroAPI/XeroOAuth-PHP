@@ -294,6 +294,7 @@ if (isset($_REQUEST['invoicesmodified'])) {
            $response = $XeroOAuth->request('GET', $XeroOAuth->url('Contacts', 'core'), array());
            if ($XeroOAuth->response['code'] == 200) {
                $contacts = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+               print_r($contacts);
                echo "There are " . count($contacts->Contacts[0]). " contacts in this Xero organisation, the first one is: </br>";
                pr($contacts->Contacts[0]->Contact);
 
@@ -343,8 +344,17 @@ if (isset($_REQUEST['invoicesmodified'])) {
    }
 
 
-   if (isset($_REQUEST['organisation'])) {
+   if (isset($_REQUEST['organisation'])&&$_REQUEST['request']=="") {
        $response = $XeroOAuth->request('GET', $XeroOAuth->url('Organisation', 'core'), array('page' => 0));
+       if ($XeroOAuth->response['code'] == 200) {
+           $organisation = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+           echo "Organisation name: " . $organisation->Organisations[0]->Organisation->Name;
+       } else {
+           outputError($XeroOAuth);
+       }
+   }elseif (isset($_REQUEST['organisation'])&&$_REQUEST['request']=="json") {
+       $response = $XeroOAuth->request('GET', $XeroOAuth->url('Organisation', 'core'), array(), $xml, 'json');
+       outputError($XeroOAuth);
        if ($XeroOAuth->response['code'] == 200) {
            $organisation = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
            echo "Organisation name: " . $organisation->Organisations[0]->Organisation->Name;
