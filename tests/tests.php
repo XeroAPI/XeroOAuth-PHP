@@ -294,7 +294,6 @@ if (isset($_REQUEST['invoicesmodified'])) {
            $response = $XeroOAuth->request('GET', $XeroOAuth->url('Contacts', 'core'), array());
            if ($XeroOAuth->response['code'] == 200) {
                $contacts = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
-               print_r($contacts);
                echo "There are " . count($contacts->Contacts[0]). " contacts in this Xero organisation, the first one is: </br>";
                pr($contacts->Contacts[0]->Contact);
 
