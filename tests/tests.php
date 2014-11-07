@@ -372,5 +372,30 @@ if (isset($_REQUEST['invoicesmodified'])) {
        }
    }
    
+   if (isset($_REQUEST['multipleoperations'])) {
+       $response = $XeroOAuth->request('GET', $XeroOAuth->url('Organisation', 'core'), array('page' => 0));
+       if ($XeroOAuth->response['code'] == 200) {
+       } else {
+           outputError($XeroOAuth);
+       }
+
+       $xml = "<ContactGroups>
+                <ContactGroup>
+                  <Name>Test group</Name>
+                  <Status>ACTIVE</Status>
+                </ContactGroup>
+              </ContactGroups>";
+       $response = $XeroOAuth->request('POST', $XeroOAuth->url('ContactGroups', 'core'), array(), $xml);
+       if ($XeroOAuth->response['code'] == 200) {
+       } else {
+           outputError($XeroOAuth);
+       }
+       $response = $XeroOAuth->request('GET', $XeroOAuth->url('ContactGroups', 'core'), array('page' => 0));
+       if ($XeroOAuth->response['code'] == 200) {
+       } else {
+           outputError($XeroOAuth);
+       }
+
+   }
 
 }

@@ -400,6 +400,7 @@ class XeroOAuth {
 		// removed these as function parameters for now
 		$useauth = true;
 		$multipart = false;
+		$this->headers = array ();
 		
 		if (isset ( $format )) {
 			switch ($format) {
