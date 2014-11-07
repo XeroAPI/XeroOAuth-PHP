@@ -356,7 +356,8 @@ if (isset($_REQUEST['invoicesmodified'])) {
        $response = $XeroOAuth->request('GET', $XeroOAuth->url('Organisation', 'core'), array(), $xml, 'json');
        if ($XeroOAuth->response['code'] == 200) {
            $organisation = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
-           echo "Organisation name: " . $organisation->Organisations[0]->Organisation->Name;
+           $json = json_decode(json_encode($organisation),true);
+           echo "Organisation name: " . $json['Organisations'][0]['Name'];
        } else {
            outputError($XeroOAuth);
        }
