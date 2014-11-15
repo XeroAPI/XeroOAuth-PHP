@@ -371,6 +371,97 @@ if (isset($_REQUEST['invoicesmodified'])) {
            outputError($XeroOAuth);
        }
    }
+
+   if (isset($_REQUEST['trackingcategories'])) {
+     if (!isset($_REQUEST['method'])) {
+         $response = $XeroOAuth->request('GET', $XeroOAuth->url('TrackingCategories', 'core'), array('page' => 0));
+         if ($XeroOAuth->response['code'] == 200) {
+             $tracking = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+             echo "There are " . count($tracking->TrackingCategories[0]). " tracking categories in this Xero organisation, the first with ". count($tracking->TrackingCategories[0]->TrackingCategory->Options) ." options. </br>";
+             echo "The first one has tracking category name: " . $tracking->TrackingCategories[0]->TrackingCategory->Name;
+             echo "</br>The first option in that category is: " . $tracking->TrackingCategories[0]->TrackingCategory->Options->Option[0]->Name;
+         } else {
+             outputError($XeroOAuth);
+         }
+     }elseif (isset($_REQUEST['method']) && $_REQUEST['method'] == "getarchived") {
+         $response = $XeroOAuth->request('GET', $XeroOAuth->url('TrackingCategories', 'core'), array('includeArchived' => 'true'));
+         if ($XeroOAuth->response['code'] == 200) {
+             $tracking = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+             echo "There are " . count($tracking->TrackingCategories[0]). " tracking categories in this Xero organisation, the first with ". count($tracking->TrackingCategories[0]->TrackingCategory->Options) ." options. </br>";
+             echo "The first one has tracking category name: " . $tracking->TrackingCategories[0]->TrackingCategory->Name;
+             echo "</br>The first option in that category is: " . $tracking->TrackingCategories[0]->TrackingCategory->Options->Option[0]->Name;
+         } else {
+             outputError($XeroOAuth);
+         }
+     }elseif (isset($_REQUEST['method']) && $_REQUEST['method'] == "put" && $_REQUEST['trackingcategories']== 1 ) {
+            $xml = "<TrackingCategories>
+                      <TrackingCategory>
+                        <Name>Salespersons</Name>
+                        <Status>ACTIVE</Status>
+                      </TrackingCategory>
+                    </TrackingCategories>";
+            $response = $XeroOAuth->request('PUT', $XeroOAuth->url('TrackingCategories', 'core'), array(), $xml);
+            if ($XeroOAuth->response['code'] == 200) {
+                $tracking = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+                echo "" . count($tracking->TrackingCategories[0]). " tracking created in this Xero organisation.";
+                if (count($tracking->TrackingCategories[0])>0) {
+                    echo "The first one is: </br>";
+                    pr($tracking->TrackingCategories[0]->TrackingCategory);
+                }
+            } else {
+                outputError($XeroOAuth);
+            }
+        }elseif (isset($_REQUEST['method']) && $_REQUEST['method'] == "archive" && $_REQUEST['trackingcategories']== 1 ) {
+              $response = $XeroOAuth->request('GET', $XeroOAuth->url('TrackingCategories', 'core'), array());
+               if ($XeroOAuth->response['code'] == 200) {
+                   $tracking = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+                   echo "There are " . count($tracking->TrackingCategories[0]). " tracking categories in this Xero organisation. </br>";
+                   if(count($tracking->TrackingCategories[0]) > 0){
+                   echo "The first one has tracking category name: " . $tracking->TrackingCategories[0]->TrackingCategory->Name;
+                   echo ", and will be archived.</br>";
+                   }
+               }
+            $xml = "<TrackingCategories>
+                      <TrackingCategory>
+                        <Name>".$tracking->TrackingCategories[0]->TrackingCategory->Name."</Name>
+                        <TrackingCategoryID>".$tracking->TrackingCategories[0]->TrackingCategory->TrackingCategoryID."</TrackingCategoryID>
+                        <Status>ARCHIVED</Status>
+                      </TrackingCategory>
+                    </TrackingCategories>";
+            if(count($tracking->TrackingCategories[0]) > 0){
+            $response = $XeroOAuth->request('POST', $XeroOAuth->url('TrackingCategories', 'core'), array(), $xml);
+            if ($XeroOAuth->response['code'] == 200) {
+                $tracking = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+                echo "" . count($tracking->TrackingCategories[0]). " tracking archived in this Xero organisation.";
+                if (count($tracking->TrackingCategories[0])>0) {
+                    echo "The first one is: </br>";
+                    pr($tracking);
+                }
+            } else {
+                outputError($XeroOAuth);
+            }
+          }
+        }elseif (isset($_REQUEST['method']) && $_REQUEST['method'] == "restore" && $_REQUEST['trackingcategories']== 1 ) {
+            $xml = "<TrackingCategories>
+                      <TrackingCategory>
+                        <Name>Region</Name>
+
+                        <Status>ACTIVE</Status>
+                      </TrackingCategory>
+                    </TrackingCategories>";
+            $response = $XeroOAuth->request('POST', $XeroOAuth->url('TrackingCategories', 'core'), array(), $xml);
+            if ($XeroOAuth->response['code'] == 200) {
+                $tracking = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+                echo "" . count($tracking->TrackingCategories[0]). " tracking restored in this Xero organisation.";
+                if (count($tracking->TrackingCategories[0])>0) {
+                    echo "The first one is: </br>";
+                    pr($tracking);
+                }
+            } else {
+                outputError($XeroOAuth);
+            }
+        }
+   }
    
    if (isset($_REQUEST['multipleoperations'])) {
        $response = $XeroOAuth->request('GET', $XeroOAuth->url('Organisation', 'core'), array('page' => 0));
