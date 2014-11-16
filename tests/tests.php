@@ -202,16 +202,11 @@ if ( isset($_REQUEST['wipe'])) {
 
 	                    $response = $XeroOAuth->request('PUT', $XeroOAuth->url('Invoice/'.$invoices->Invoices[0]->Invoice->InvoiceID.'/Attachments/image.png', 'core'), array(), $attachmentFile, 'file');
 	                		if ($XeroOAuth->response['code'] == 200) {
-                				$invoice = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
-                					echo "" . count($invoice->Invoices[0]). " invoice created in this Xero organisation.";
-                						if (count($invoice->Invoices[0])>0) {
-                    					echo "The first one is: </br>";
-                    					pr($invoice->Invoices[0]->Invoice);
-                						}
+                					echo "Attachment successfully created against this invoice.";
+                						
 				            } else {
 				                outputError($XeroOAuth);
 				            }
-	                    echo "PDF copy downloaded, check the directory of this script for the file.</br>";
 	                }
 	            } else {
 	                outputError($XeroOAuth);
