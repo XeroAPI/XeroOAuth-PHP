@@ -367,19 +367,6 @@ class XeroOAuth {
 		$this->response ['format'] = $this->format;
 		return $code;
 	}
-	function MakeRequest($endpoint, $parameters, $action, $data, $app_type, $format = "xml") {
-		$oauthObject = new OAuthSimple ();
-		
-		// Set some standard curl options....
-		
-		$useragent = USER_AGENT;
-		$useragent = isset ( $useragent ) ? USER_AGENT : 'XeroOAuth-PHP';
-		$options [CURLOPT_USERAGENT] = $useragent;
-		$options [CURLOPT_VERBOSE] = 1;
-		$options [CURLOPT_RETURNTRANSFER] = 1;
-		$options [CURLOPT_SSL_VERIFYHOST] = 0;
-		$options [CURLOPT_SSL_VERIFYPEER] = 0;
-	}
 	
 	/**
 	 * Make an HTTP request using this library.
