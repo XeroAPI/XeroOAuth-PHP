@@ -433,7 +433,10 @@ class XeroOAuth {
 		} 
 
 		catch ( Exception $e ) {
-			$errorMessage = $e->getMessage ();
+			$errorMessage = 'XeroOAuth::request() ' . $e->getMessage ();
+			$this->response['response'] = $errorMessage;
+			$this->response['helper'] = $url;
+			return $this->response;
 		}
 		$this->format = $format;
 		
