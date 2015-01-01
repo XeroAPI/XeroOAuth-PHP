@@ -513,7 +513,7 @@ class XeroOAuth {
 					$api_version = $this->config ['payroll_version'];
 				}
 				if ($api == "file") {
-					$api_stem = "file.xro";
+					$api_stem = "files.xro";
 					$api_version = $this->config ['file_version'];
 				}
 			}
