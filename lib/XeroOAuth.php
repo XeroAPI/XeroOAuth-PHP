@@ -87,7 +87,7 @@ class XeroOAuth {
 				'curl_verbose' => true 
 		);
 		
-		$this->config = array_merge ( $config, $this->_xero_defaults, $this->_xero_consumer_options, $this->_xero_curl_options );
+		$this->config = array_merge ( $this->_xero_defaults, $this->_xero_consumer_options, $this->_xero_curl_options, $config );
 	}
 	
 	/**
