@@ -129,29 +129,8 @@ Understanding the type of message you are getting from the API could be useful. 
 
 ## License & Credits
 
-This software is published under the [MIT License](http://en.wikipedia.org/wiki/MIT_License).
-
 ###### OAuthSimple
 OAuthsimple.php contains minor adaptations from the OAuthSimple PHP class by [United Heroes](http://unitedheroes.net/OAuthSimple/).
 
 ###### tmhOAuth
 XeroOAuth class is based on code and structure derived from the [tmhOAuth](https://github.com/themattharris/tmhOAuth) library.
-
-## Major change history
-
-#### 0.4 - 29th September 2014
-
-Merged a some pull requests, addressed an issue with multiple calls having signature validation issues.
-
-#### 0.3 - 3rd January 2014
-
-Merged a number of pull requests, tidied up formatting and extended sample tests.
-
-#### 0.2 - 13th May 2013
-
-Merged to master, added more tests and improved security handling for partner API apps.
-
-
-#### 0.1 - 10th May 2013
-
-Initial release candidate prepared and released to 'refactor' branch.

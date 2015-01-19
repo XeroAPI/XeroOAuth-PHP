@@ -8,5 +8,6 @@
     },
     "autoload": {
         "classmap": ["lib/"]
-    }
+    },
+    "license": "MIT"
 }
