@@ -1,5 +1,16 @@
-XeroOAuth-PHP
------------------------
+Xero API
+========
+
+**This is the community official package since Xero is unwillign to add composer support or clean up the library.**
+
+### Installation
+
+```
+composer require elliotchance/xero-api
+```
+
+Original README
+===============
 
 PHP library for working with the Xero OAuth API.
 
