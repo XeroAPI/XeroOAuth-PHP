@@ -1,5 +1,5 @@
 {
-    "name": "XeroAPI/XeroOAuth-PHP",
+    "name": "elliotchance/xero-api",
     "description": "PHP class for the Xero API V2 http://developer.xero.com/getting-started/code/php/",
     "require": {
         "php": ">=5",
