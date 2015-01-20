@@ -6,9 +6,15 @@ Xero API
 [![License](https://poser.pugx.org/elliotchance/xero-api/license.svg)](https://packagist.org/packages/elliotchance/xero-api)
 [![Build Status](https://travis-ci.org/elliotchance/xero-api.svg?branch=master)](https://travis-ci.org/elliotchance/xero-api)
 
-**This is the community official package since Xero is unwilling to add composer support or clean up the library.** Please add existing pull requests and issues against this repository and we can all help fix it up :)
+**This is the community official package since Xero is unwilling to add composer
+support or clean up the library.** Please add existing pull requests and issues
+against this repository and we can all help fix it up :)
 
-Semantic versions have been created for existing releases and will be created here in the future.
+Semantic versions have been created for existing releases and will be created
+based on the same version from the original repository to keep it up to date. On
+top of that we have patches (i.e. `0.5.1`) between Xero releases.
+
+There will be a suite of tests coming soon.
 
 ### Installation
 
