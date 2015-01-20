@@ -4,6 +4,7 @@ Xero API
 [![Latest Stable Version](https://poser.pugx.org/elliotchance/xero-api/version.svg)](https://packagist.org/packages/elliotchance/xero-api)
 [![Total Downloads](https://poser.pugx.org/elliotchance/xero-api/downloads.svg)](https://packagist.org/packages/elliotchance/xero-api)
 [![License](https://poser.pugx.org/elliotchance/xero-api/license.svg)](https://packagist.org/packages/elliotchance/xero-api)
+[![Build Status](https://travis-ci.org/elliotchance/xero-api.svg?branch=master)](https://travis-ci.org/elliotchance/xero-api)
 
 **This is the community official package since Xero is unwilling to add composer support or clean up the library.** Please add existing pull requests and issues against this repository and we can all help fix it up :)
 
@@ -129,35 +130,8 @@ Understanding the type of message you are getting from the API could be useful. 
 
 ## License & Credits
 
-This software is published under the [MIT License](http://en.wikipedia.org/wiki/MIT_License).
-
 ###### OAuthSimple
 OAuthsimple.php contains minor adaptations from the OAuthSimple PHP class by [United Heroes](http://unitedheroes.net/OAuthSimple/).
 
 ###### tmhOAuth
 XeroOAuth class is based on code and structure derived from the [tmhOAuth](https://github.com/themattharris/tmhOAuth) library.
-
-## Major change history
-
-#### 0.5 - 16th November 2014
-
-Added examples for CRU of tracking categories and options.
-Updated the CA certs to a recent one - warning that if you are using a very old version of curl you may get 'cert invalid' type error.
-Removed an unused function and tidied up comments on another to make them more sensible.
-
-#### 0.4 - 29th September 2014
-
-Merged some pull requests, addressed an issue with multiple calls having signature validation issues.
-
-#### 0.3 - 3rd January 2014
-
-Merged a number of pull requests, tidied up formatting and extended sample tests.
-
-#### 0.2 - 13th May 2013
-
-Merged to master, added more tests and improved security handling for partner API apps.
-
-
-#### 0.1 - 10th May 2013
-
-Initial release candidate prepared and released to 'refactor' branch.
