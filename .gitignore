@@ -6,6 +6,6 @@
 *.p12
 *.cer
 *.pfx
-.*
+.idea
 
 /vendor/
