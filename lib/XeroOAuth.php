@@ -236,7 +236,6 @@ class XeroOAuth {
 	 * @return void response data is stored in the class variable 'response'
 	 */
 	private function curlit() {
-		$this->headers = array ();
 		$this->request_params = array();
 	
 		
@@ -368,19 +367,6 @@ class XeroOAuth {
 		$this->response ['format'] = $this->format;
 		return $code;
 	}
-	function MakeRequest($endpoint, $parameters, $action, $data, $app_type, $format = "xml") {
-		$oauthObject = new OAuthSimple ();
-		
-		// Set some standard curl options....
-		
-		$useragent = USER_AGENT;
-		$useragent = isset ( $useragent ) ? USER_AGENT : 'XeroOAuth-PHP';
-		$options [CURLOPT_USERAGENT] = $useragent;
-		$options [CURLOPT_VERBOSE] = 1;
-		$options [CURLOPT_RETURNTRANSFER] = 1;
-		$options [CURLOPT_SSL_VERIFYHOST] = 0;
-		$options [CURLOPT_SSL_VERIFYPEER] = 0;
-	}
 	
 	/**
 	 * Make an HTTP request using this library.
@@ -401,6 +387,7 @@ class XeroOAuth {
 		// removed these as function parameters for now
 		$useauth = true;
 		$multipart = false;
+		$this->headers = array ();
 		
 		if (isset ( $format )) {
 			switch ($format) {
@@ -446,7 +433,10 @@ class XeroOAuth {
 		} 
 
 		catch ( Exception $e ) {
-			$errorMessage = $e->getMessage ();
+			$errorMessage = 'XeroOAuth::request() ' . $e->getMessage ();
+			$this->response['response'] = $errorMessage;
+			$this->response['helper'] = $url;
+			return $this->response;
 		}
 		$this->format = $format;
 		
@@ -524,6 +514,10 @@ class XeroOAuth {
 				if ($api == "payroll") {
 					$api_stem = "payroll.xro";
 					$api_version = $this->config ['payroll_version'];
+				}
+				if ($api == "file") {
+					$api_stem = "files.xro";
+					$api_version = $this->config ['file_version'];
 				}
 			}
 			$this->config ['host'] = $this->config ['xero_url'] . $api_stem . '/' . $api_version . '/';

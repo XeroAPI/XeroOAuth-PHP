@@ -43,7 +43,8 @@ $signatures = array (
 		'shared_secret' => 'YOURSECRET',
 		// API versions
 		'core_version' => '2.0',
-		'payroll_version' => '1.0' 
+		'payroll_version' => '1.0',
+		'file_version' => '1.0' 
 );
 
 if (XRO_APP_TYPE == "Private" || XRO_APP_TYPE == "Partner") {

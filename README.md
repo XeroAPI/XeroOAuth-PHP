@@ -30,7 +30,7 @@ production environment.
 
 ## Requirements
 * PHP 5+
-* php\_curl extension
+* php\_curl extension - ensure a recent version (7.30+)
 * php\_openssl extension
 
 
@@ -139,9 +139,15 @@ XeroOAuth class is based on code and structure derived from the [tmhOAuth](https
 
 ## Major change history
 
+#### 0.5 - 16th November 2014
+
+Added examples for CRU of tracking categories and options.
+Updated the CA certs to a recent one - warning that if you are using a very old version of curl you may get 'cert invalid' type error.
+Removed an unused function and tidied up comments on another to make them more sensible.
+
 #### 0.4 - 29th September 2014
 
-Merged a some pull requests, addressed an issue with multiple calls having signature validation issues.
+Merged some pull requests, addressed an issue with multiple calls having signature validation issues.
 
 #### 0.3 - 3rd January 2014
 
