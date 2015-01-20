@@ -6,6 +6,10 @@
         "lib-curl": "*",
         "lib-openssl": "*"
     },
+    "require-dev": {
+        "elliotchance/concise": "*",
+        "phpunit/phpunit": "*"
+    },
     "autoload": {
         "classmap": ["lib/"]
     }
