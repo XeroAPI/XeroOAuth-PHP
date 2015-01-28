@@ -396,7 +396,7 @@ if( isset($_REQUEST['items'])) {
            $xml = "<Items>
                      <Item>
                        <Code>ITEM-CODE-01</Code>
-                     </Item>
+                      </Item>
                    </Items>
                    ";
            $response = $XeroOAuth->request('PUT', $XeroOAuth->url('Items', 'core'), array(), $xml);
@@ -534,15 +534,40 @@ if( isset($_REQUEST['items'])) {
    }
 
    if (isset($_REQUEST['folders'])) {
+       if (!isset($_REQUEST['method'])) {
         $response = $XeroOAuth->request('GET', $XeroOAuth->url('Folders', 'file'), array());
-        if ($XeroOAuth->response['code'] == 200) {
-            $folders = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
-            echo "There are " . count($folders). " folders in this Xero organisation, the first one is: </br>";
-            pr($folders->Folder[0]);
-        } else {
-            outputError($XeroOAuth);
+          if ($XeroOAuth->response['code'] == 200) {
+              $folders = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+              echo "There are " . count($folders). " folders in this Xero organisation, the first one is: </br>";
+              pr($folders->Folder[0]);
+          } else {
+              outputError($XeroOAuth);
+          }
+    }elseif (isset($_REQUEST['method']) && $_REQUEST['method'] == "files" && $_REQUEST['folders']== 1 ) {
+            
+            $response = $XeroOAuth->request('GET', $XeroOAuth->url('Folders', 'file'), array());
+               if ($XeroOAuth->response['code'] == 200) {
+                   $folder = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+                   echo "There are " . count($folder). " folders in this Xero organisation. </br>";
+                   if(count($folder->Folder[0]) > 0){
+                   echo "The first one has the name: " . $folder->Folder[0]->Name;
+                   echo ", and will be checked for files.</br>";
+                   }
+                }
+
+            $response = $XeroOAuth->request('GET', $XeroOAuth->url('Folders/'.$folder->Folder[0]->Id.'/Files', 'file'), array(), $xml);
+            if ($XeroOAuth->response['code'] == 200) {
+                $folders = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+                echo "" . $folders->FileCount. " files in this folder.";
+                if (count($folders->Files[0])>0) {
+                    echo "The first one is: </br>";
+                    pr($folders->Files[0]->Items[0]->File[0]);
+                }
+            } else {
+                outputError($XeroOAuth);
+            }
         }
-    }
+      }
    
    if (isset($_REQUEST['multipleoperations'])) {
        $response = $XeroOAuth->request('GET', $XeroOAuth->url('Organisation', 'core'), array('page' => 0));

@@ -16,6 +16,7 @@ function testLinks()
                 <li><a href="?contacts=1&method=post">Contacts POST</a></li>
                 <li><a href="?contacts=1&method=put">Contacts PUT</a></li>
                 <li><a href="?folders=1">Folders GET</a></li>
+                <li><a href="?folders=1&method=files">Folder/Files GET</a></li>
                 <li><a href="?payrollemployees=1">Payroll Employees GET</a></li>
                 <li><a href="?payruns=1">Payroll Payruns GET</a></li>
                 <li><a href="?payrollsuperfunds=1">Payroll Superfunds GET</a></li>
