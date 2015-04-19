@@ -110,6 +110,22 @@ if ( isset($_REQUEST['wipe'])) {
             outputError($XeroOAuth);
         }
     }
+    if (isset($_REQUEST['timesheets'])) {
+        $xml = "<Timesheet> 
+                    <EmployeeID>5e493b2e-c3ed-4172-95b2-593438101f76</EmployeeID>
+                    <StartDate>2015-04-13T00:00:00</StartDate>
+                    <EndDate>2015-04-20T00:00:00</EndDate>
+                    <Status>Draft</Status> 
+                </Timesheet>";
+        $response = $XeroOAuth->request('POST', $XeroOAuth->url('Timesheets', 'payroll'), array(), $xml, 'xml');
+        if ($XeroOAuth->response['code'] == 200) {
+            $timesheets = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+            echo "There are " . count($timesheets->Timesheets[0]). " Timesheet created in this Xero organisation, the first one is: </br>";
+            pr($timesheets->Timesheets[0]->Timesheet);
+        } else {
+            outputError($XeroOAuth);
+        }
+    }
     if (isset($_REQUEST['superfundproducts'])) {
         $response = $XeroOAuth->request('GET', $XeroOAuth->url('SuperFundProducts', 'payroll'), array('ABN' => $_REQUEST['where']));
         if ($XeroOAuth->response['code'] == 200) {
@@ -247,7 +263,6 @@ if ( isset($_REQUEST['wipe'])) {
 	                    $response = $XeroOAuth->request('PUT', $XeroOAuth->url('Invoice/'.$invoices->Invoices[0]->Invoice->InvoiceID.'/Attachments/image.png', 'core'), array(), $attachmentFile, 'file');
 	                		if ($XeroOAuth->response['code'] == 200) {
                 					echo "Attachment successfully created against this invoice.";
-                						
 				            } else {
 				                outputError($XeroOAuth);
 				            }
