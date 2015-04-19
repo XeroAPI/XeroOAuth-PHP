@@ -296,6 +296,7 @@ class XeroOAuth {
 				curl_setopt ( $c, CURLOPT_POSTFIELDS, $post_body );
 				$this->request_params ['xml'] = $post_body;
 				$contentLength = strlen ( $post_body );
+				$this->headers ['Content-Type'] = 'application/x-www-form-urlencoded';
 				
 				break;
 			case 'PUT' :
@@ -311,6 +312,7 @@ class XeroOAuth {
 				curl_setopt ( $c, CURLOPT_INFILE, $fh );
 				curl_setopt ( $c, CURLOPT_INFILESIZE, strlen ( $put_body ) );
 				$contentLength = strlen ( $put_body );
+				$this->headers ['Content-Type'] = 'application/x-www-form-urlencoded';
 				
 				break;
 			default :
@@ -328,7 +330,6 @@ class XeroOAuth {
 			curl_setopt ( $c, CURLOPT_POSTFIELDS, $this->request_payload);
 		} else {
 			// CURL will set length to -1 when there is no data
-			$this->headers ['Content-Type'] = '';
 			$this->headers ['Content-Length'] = $contentLength;
 		}
 		
