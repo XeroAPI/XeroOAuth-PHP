@@ -11,17 +11,18 @@ if (! class_exists ( 'OAuthSimple' )) {
 class XeroOAuthException extends Exception {
 }
 class XeroOAuth {
-	public $_xero_defaults;
-	public $_xero_consumer_options;
-	public $_action;
-	public $_nonce_chars;
+	var $_xero_defaults;
+	var $_xero_consumer_options;
+	var $_action;
+	var $_nonce_chars;
 	
 	/**
 	 * Creates a new XeroOAuth object
 	 *
-	 * @param array $config The configuration settings.
+	 * @param string $config,
+	 *        	the configuration settings
 	 */
-	function __construct(array $config) {
+	function __construct($config) {
 		$this->params = array ();
 		$this->headers = array ();
 		$this->auto_fixed_time = false;
@@ -97,7 +98,7 @@ class XeroOAuth {
 	 *        	curl handle
 	 * @param string $header
 	 *        	the response headers
-	 * @return string The string length of the header
+	 * @return the string length of the header
 	 */
 	private function curlHeader($ch, $header) {
 		$i = strpos ( $header, ':' );
