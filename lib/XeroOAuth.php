@@ -305,6 +305,7 @@ class XeroOAuth {
 					$put_body = $this->xml;
 				} else {
 					$put_body = $this->safe_encode ( $this->xml );
+					$this->headers ['Content-Type'] = 'application/x-www-form-urlencoded';
 				}
 				fwrite ( $fh, $put_body );
 				rewind ( $fh );
@@ -312,7 +313,6 @@ class XeroOAuth {
 				curl_setopt ( $c, CURLOPT_INFILE, $fh );
 				curl_setopt ( $c, CURLOPT_INFILESIZE, strlen ( $put_body ) );
 				$contentLength = strlen ( $put_body );
-				$this->headers ['Content-Type'] = 'application/x-www-form-urlencoded';
 				
 				break;
 			default :
