@@ -121,7 +121,7 @@ XeroOAuth class is based on code and structure derived from the [tmhOAuth](https
 
 ## Major change history
 
-#### 0.6 - 19th April 2014
+#### 0.6 - 19th April 2015
 
 Added composer support.
 Modified content-type so is also set for PUT requests
