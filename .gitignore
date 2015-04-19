@@ -6,6 +6,7 @@
 *.p12
 *.cer
 *.pfx
-.idea
-
-/vendor/
+<<<<<<< HEAD
+.*
+=======
+>>>>>>> 65378c19b093593e1019e5cf6b6ffc72e389ecc5
