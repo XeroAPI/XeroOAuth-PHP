@@ -1,0 +1,14 @@
+{
+    "autoload": {
+        "classmap": ["lib/"]
+    },
+    "description": "PHP class for the Xero API V2",
+    "homepage": "https://github.com/XeroAPI/XeroOAuth-PHP",
+    "license": "MIT",
+    "name": "xeroapi/xerooauth-php",
+    "require": {
+        "ext-openssl": "*",
+        "ext-curl": "*",
+        "php": ">=5.0.0"
+    }
+}
