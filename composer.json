@@ -1,6 +1,6 @@
 {
     "name": "xero/xerooauth-php",
-    "description": "PHP class the Xero APIs",
+    "description": "PHP class for the Xero APIs",
     "type": "library",
     "keywords": ["xero","accounting","api","oauth"],
     "homepage": "https://github.com/XeroAPI/XeroOAuth-PHP",
