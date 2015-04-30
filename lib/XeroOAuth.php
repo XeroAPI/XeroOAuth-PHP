@@ -418,6 +418,18 @@ class XeroOAuth {
 		if ($method == "POST")
 			$params ['xml'] = $xml;
 		
+		if (isset($params)) {
+    		$params = array_merge ( $params, array (
+					'oauth_signature_method' => $this->config ['signature_method'] 
+			) );
+		}
+		else
+		{
+    		$params = array (
+					'oauth_signature_method' => $this->config ['signature_method'] 
+			);
+		}
+		
 		$this->prepare_method ( $method );
 		$this->config ['multipart'] = $multipart;
 		$this->url = $url;
@@ -426,9 +438,7 @@ class XeroOAuth {
 			$this->sign = $oauthObject->sign ( array (
 					'path' => $url,
 					'action' => $method,
-					'parameters' => array_merge ( $params, array (
-							'oauth_signature_method' => $this->config ['signature_method'] 
-					) ),
+					'parameters' => $params,
 					'signatures' => $this->config 
 			) );
 		} 
