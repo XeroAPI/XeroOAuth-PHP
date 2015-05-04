@@ -43,15 +43,15 @@ function testLinks()
                 <li><a href="?timesheets=1">Timesheets POST</a></li>
                 </ul>
 
-                <br/><Strong>File API</Strong>
+                <br/><Strong>Files API</Strong>
                 <ul>
-                <li><a href="?=1">Home</a></li>
                 <li><a href="?folders=1">Folders GET</a></li>
                 <li><a href="?folders=1&method=files">Folder/Files GET</a></li>
                 </ul>
 
                 <br/><Strong>Connection Admin</Strong>
-                <ul>';
+                <ul>
+                <li><a href="?=1">Home</a></li>';
 
         if (XRO_APP_TYPE == 'Partner')   echo '<li><a href="?refresh=1">Refresh access token</a></li>';
         if (XRO_APP_TYPE !== 'Private' && isset($_SESSION['access_token'])) {
