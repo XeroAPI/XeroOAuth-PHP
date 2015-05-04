@@ -44,7 +44,7 @@ $signatures = array (
 		// API versions
 		'core_version' => '2.0',
 		'payroll_version' => '1.0',
-		'file_version' => '1.0' 
+		'file_version' => '1.0'
 );
 
 if (XRO_APP_TYPE == "Private" || XRO_APP_TYPE == "Partner") {
@@ -60,7 +60,7 @@ if (XRO_APP_TYPE == "Partner") {
 $XeroOAuth = new XeroOAuth ( array_merge ( array (
 		'application_type' => XRO_APP_TYPE,
 		'oauth_callback' => OAUTH_CALLBACK,
-		'user_agent' => $useragent 
+		'user_agent' => $useragent
 ), $signatures ) );
 
 $initialCheck = $XeroOAuth->diagnostics ();
@@ -71,27 +71,27 @@ if ($checkErrors > 0) {
 		echo 'Error: ' . $check . PHP_EOL;
 	}
 } else {
-	
+
 	$here = XeroOAuth::php_self ();
 	session_start ();
 	$oauthSession = retrieveSession ();
-	
+
 	include 'tests/tests.php';
-	
+
 	if (isset ( $_REQUEST ['oauth_verifier'] )) {
 		$XeroOAuth->config ['access_token'] = $_SESSION ['oauth'] ['oauth_token'];
 		$XeroOAuth->config ['access_token_secret'] = $_SESSION ['oauth'] ['oauth_token_secret'];
-		
+
 		$code = $XeroOAuth->request ( 'GET', $XeroOAuth->url ( 'AccessToken', '' ), array (
 				'oauth_verifier' => $_REQUEST ['oauth_verifier'],
-				'oauth_token' => $_REQUEST ['oauth_token'] 
+				'oauth_token' => $_REQUEST ['oauth_token']
 		) );
-		
+
 		if ($XeroOAuth->response ['code'] == 200) {
-			
+
 			$response = $XeroOAuth->extract_params ( $XeroOAuth->response ['response'] );
 			$session = persistSession ( $response );
-			
+
 			unset ( $_SESSION ['oauth'] );
 			header ( "Location: {$here}" );
 		} else {
@@ -100,27 +100,27 @@ if ($checkErrors > 0) {
 		// start the OAuth dance
 	} elseif (isset ( $_REQUEST ['authenticate'] ) || isset ( $_REQUEST ['authorize'] )) {
 		$params = array (
-				'oauth_callback' => OAUTH_CALLBACK 
+				'oauth_callback' => OAUTH_CALLBACK
 		);
-		
+
 		$response = $XeroOAuth->request ( 'GET', $XeroOAuth->url ( 'RequestToken', '' ), $params );
-		
+
 		if ($XeroOAuth->response ['code'] == 200) {
-			
+
 			$scope = "";
 			// $scope = 'payroll.payrollcalendars,payroll.superfunds,payroll.payruns,payroll.payslip,payroll.employees,payroll.TaxDeclaration';
 			if ($_REQUEST ['authenticate'] > 1)
 				$scope = 'payroll.employees,payroll.payruns,payroll.timesheets';
-			
+
 			print_r ( $XeroOAuth->extract_params ( $XeroOAuth->response ['response'] ) );
 			$_SESSION ['oauth'] = $XeroOAuth->extract_params ( $XeroOAuth->response ['response'] );
-			
+
 			$authurl = $XeroOAuth->url ( "Authorize", '' ) . "?oauth_token={$_SESSION['oauth']['oauth_token']}&scope=" . $scope;
 			echo '<p>To complete the OAuth flow follow this URL: <a href="' . $authurl . '">' . $authurl . '</a></p>';
 		} else {
 			outputError ( $XeroOAuth );
 		}
 	}
-	
+
 	testLinks ();
 }

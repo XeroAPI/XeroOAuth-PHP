@@ -2,7 +2,7 @@
 if (isset($_REQUEST)){
 	if (!isset($_REQUEST['where'])) $_REQUEST['where'] = "";
 }
-	
+
 if ( isset($_REQUEST['wipe'])) {
   session_destroy();
   header("Location: {$here}");
@@ -111,11 +111,11 @@ if ( isset($_REQUEST['wipe'])) {
         }
     }
     if (isset($_REQUEST['timesheets'])) {
-        $xml = "<Timesheet> 
+        $xml = "<Timesheet>
                     <EmployeeID>5e493b2e-c3ed-4172-95b2-593438101f76</EmployeeID>
                     <StartDate>2015-04-13T00:00:00</StartDate>
                     <EndDate>2015-04-20T00:00:00</EndDate>
-                    <Status>Draft</Status> 
+                    <Status>Draft</Status>
                 </Timesheet>";
         $response = $XeroOAuth->request('POST', $XeroOAuth->url('Timesheets', 'payroll'), array(), $xml, 'xml');
         if ($XeroOAuth->response['code'] == 200) {
@@ -159,7 +159,7 @@ if ( isset($_REQUEST['wipe'])) {
                 outputError($XeroOAuth);
             }
         } elseif (isset($_REQUEST['method']) && $_REQUEST['method'] == "put" && $_REQUEST['invoice']== 1 ) {
-            $xml = "<Invoices>
+            $xml = urlencode("<Invoices>
                       <Invoice>
                         <Type>ACCREC</Type>
                         <Contact>
@@ -177,7 +177,7 @@ if ( isset($_REQUEST['wipe'])) {
                           </LineItem>
                         </LineItems>
                       </Invoice>
-                    </Invoices>";
+                    </Invoices>");
             $response = $XeroOAuth->request('PUT', $XeroOAuth->url('Invoices', 'core'), array(), $xml);
             if ($XeroOAuth->response['code'] == 200) {
                 $invoice = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
@@ -270,14 +270,14 @@ if ( isset($_REQUEST['wipe'])) {
 	            } else {
 	                outputError($XeroOAuth);
 	            }
-           
+
         }
 
 
     }
     if (isset($_REQUEST['invoicesfilter'])) {
         $response = $XeroOAuth->request('GET', $XeroOAuth->url('Invoices', 'core'), array('Where' => 'Contact.Name.Contains("Martin")'));
-      
+
        if ($XeroOAuth->response['code'] == 200) {
            $accounts = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
            echo "There are " . count($accounts->Invoices[0]). " matching invoices in this Xero organisation, the first one is: </br>";
@@ -378,11 +378,11 @@ if (isset($_REQUEST['invoicesmodified'])) {
                outputError($XeroOAuth);
            }
        }elseif(isset($_REQUEST['method']) && $_REQUEST['method'] == "put" ){
-    $xml = "<Contacts>
+    $xml = urlencode("<Contacts>
             <Contact>
               <Name>Orlena Greenville</Name>
             </Contact>
-          </Contacts>";
+          </Contacts>");
     $response = $XeroOAuth->request('PUT', $XeroOAuth->url('Contacts', 'core'), array(), $xml);
       if ($XeroOAuth->response['code'] == 200) {
         $contacts = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
@@ -392,7 +392,7 @@ if (isset($_REQUEST['invoicesmodified'])) {
           pr($contacts->Contacts[0]->Contact);
         }
       } else {
-        outputError($XeroOAuth); 
+        outputError($XeroOAuth);
       }
   }
    }
@@ -560,7 +560,7 @@ if( isset($_REQUEST['items'])) {
               outputError($XeroOAuth);
           }
     }elseif (isset($_REQUEST['method']) && $_REQUEST['method'] == "files" && $_REQUEST['folders']== 1 ) {
-            
+
             $response = $XeroOAuth->request('GET', $XeroOAuth->url('Folders', 'file'), array());
                if ($XeroOAuth->response['code'] == 200) {
                    $folder = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
@@ -584,7 +584,7 @@ if( isset($_REQUEST['items'])) {
             }
         }
       }
-   
+
    if (isset($_REQUEST['multipleoperations'])) {
        $response = $XeroOAuth->request('GET', $XeroOAuth->url('Organisation', 'core'), array('page' => 0));
        if ($XeroOAuth->response['code'] == 200) {
