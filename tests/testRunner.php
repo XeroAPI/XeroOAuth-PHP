@@ -6,6 +6,7 @@ function testLinks()
     if (isset($_SESSION['access_token']) || XRO_APP_TYPE == 'Private')
         echo '<ul>
                 <li><a href="?=1">Home</a></li>
+                <li><a href="?=1">home</a></li>
                 <li><a href="?organisation=1">Organisation</a></li>
                 <li><a href="?organisation=1&request=json">Organisation (JSON response)</a></li>
                 <li><a href="?accounts=1">Accounts GET</a></li>
