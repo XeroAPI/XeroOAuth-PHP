@@ -301,12 +301,23 @@ class XeroOAuth {
 				break;
 			case 'PUT' :
 				$fh = tmpfile();
-				if ($this->format == "file") {
-					$put_body = $this->xml;
-				} else {
-					$put_body = $this->safe_encode ( $this->xml );
-					$this->headers ['Content-Type'] = 'application/x-www-form-urlencoded';
-				}
+				switch ($this->format) {
+					case "file" :
+						$put_body = $this->xml;
+						break;
+                                	case "pdf" :
+						$put_body = $this->xml;
+                                        	$this->headers ['Content-Type'] = 'application/pdf';
+                                        	break;
+                                	case "json" :
+						$put_body = $this->xml;
+                                        	$this->headers ['Content-Type'] = 'application/json';
+                                        	break;
+                                	default :
+                                        	$put_body = $this->safe_encode ( $this->xml );
+                                        	$this->headers ['Content-Type'] = 'application/x-www-form-urlencoded';
+                                        	break;
+                        	}
 				fwrite ( $fh, $put_body );
 				rewind ( $fh );
 				curl_setopt ( $c, CURLOPT_PUT, true );
