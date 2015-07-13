@@ -13,6 +13,7 @@ function testLinks()
                 <li><a href="?accountsfilter=1">Accounts GET - Where Type is BANK</a></li>
                 <li><a href="?banktransactions=1">BankTransactions GET</a></li>
                 <li><a href="?banktransactions=1&method=put">BankTransactions PUT</a></li>
+                <li><a href="?CreditNotesallocation=1&method=PUT"> Credit Notes Allocation</a></li>
                 <li><a href="?contacts=1">Contacts GET</a></li>
                 <li><a href="?contacts=1&method=post">Contacts POST</a></li>
                 <li><a href="?contacts=1&method=put">Contacts PUT</a></li>
@@ -26,7 +27,7 @@ function testLinks()
                 <li><a href="?invoice=1">Invoices GET (with order by Total example)</a></li>
                 <li><a href="?invoicesfilter=1">Invoices GET - Where Contact Name contains "Martin"</a></li>
                 <li><a href="?invoicesmodified=1">Invoices GET - If-Modified-Since</a></li>
-                <li><a href="?invoice=1&method=put">Invoices PUT</a></li>
+                <li><a href="?invoice=1&method=put">Invoices PUT (With SummarizeErrors=false)</a></li>
                 <li><a href="?invoice=1&method=4dp">Invoices PUT (4 decimal places)</a></li>
                 <li><a href="?invoice=1&method=post">Invoices POST</a></li>
                 <li><a href="?invoice=attachment&method=put">Invoice attachment PUT</a></li>

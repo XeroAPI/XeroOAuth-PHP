@@ -36,6 +36,24 @@ if ( isset($_REQUEST['wipe'])) {
         }
     }
 
+    if(isset($_REQUEST['CreditNotesallocation']) && $_REQUEST['method']=="PUT"){
+    $xml="<Allocations>
+    <Allocation>
+      <AppliedAmount>1.50</AppliedAmount>
+      <Invoice>
+      <InvoiceID>2404f66d-76a2-4e85-b80e-7dd692fe3588</InvoiceID>
+    </Invoice>
+     </Allocation>
+   </Allocations>";
+   $response = $XeroOAuth->request('PUT', $XeroOAuth->url('CreditNotes/1e2d74e7-2fa8-45ec-9fd5-b459778c0752/Allocations', 'core'), array('SummarizeErrors' => 'false'), $xml);
+       if ($XeroOAuth->response['code'] == 200) {
+           $TrackingCategories = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+           echo "The CreditNotes is now Allocated to invoice specified: " . $CreditNotes->CreditNotes[0]->CreditNotes;
+       } else {
+           outputError($XeroOAuth);
+       }
+     }
+
     if (isset($_REQUEST['payments'])) {
        if (!isset($_REQUEST['method'])) {
           $response = $XeroOAuth->request('GET', $XeroOAuth->url('Payments', 'core'), array('Where' => 'Status=="AUTHORISED"'));
@@ -162,7 +180,7 @@ if ( isset($_REQUEST['wipe'])) {
                         </LineItems>
                       </Invoice>
                     </Invoices>";
-            $response = $XeroOAuth->request('PUT', $XeroOAuth->url('Invoices', 'core'), array(), $xml);
+            $response = $XeroOAuth->request('PUT', $XeroOAuth->url('Invoices', 'core'), array('SummarizeErrors' => 'false'), $xml);
             if ($XeroOAuth->response['code'] == 200) {
                 $invoice = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
                 echo "" . count($invoice->Invoices[0]). " invoice created in this Xero organisation.";
