@@ -39,7 +39,9 @@ function testLinks()
                 <li><a href="?trackingcategories=1&method=getarchived">Tracking Categories - GET (+ archived)</a></li>
                 <li><a href="?trackingcategories=1&method=put">Tracking Categories - PUT</a></li>
                 <li><a href="?trackingcategories=1&method=archive">Tracking Categories - ARCHIVE</a></li>
-                <li><a href="?trackingcategories=1&method=restore">Tracking Categories - restore to active</a></li>';
+                <li><a href="?trackingcategories=1&method=restore">Tracking Categories - restore to active</a></li>
+                <li><a href="?GetAllLinkedTransactions=1">Get All LinkedTransactions</a></li>
+                <li><a href="?LinkedTransaction=1">LinkedTransaction POST</a></li>';
 
         if (XRO_APP_TYPE == 'Partner')   echo '<li><a href="?refresh=1">Refresh access token</a></li>';
         if (XRO_APP_TYPE !== 'Private' && isset($_SESSION['access_token'])) {

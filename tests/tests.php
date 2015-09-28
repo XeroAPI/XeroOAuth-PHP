@@ -99,7 +99,7 @@ if ( isset($_REQUEST['wipe'])) {
         }
     }
     if (isset($_REQUEST['payrollemployees'])) {
-        $response = $XeroOAuth->request('GET', $XeroOAuth->url('Employees', 'payroll'), array());
+        $response = $XeroOAuth->request('GET', $XeroOAuth->url('Employees', 'payroll'), array('If-Modified-Since' => "2015-08-01T01:16:10.853"));
         if ($XeroOAuth->response['code'] == 200) {
             $employees = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
             echo "There are " . count($employees->Employees[0]). " employees in this Xero organisation, the first one is: </br>";
@@ -165,16 +165,16 @@ if ( isset($_REQUEST['wipe'])) {
                       <Invoice>
                         <Type>ACCREC</Type>
                         <Contact>
-                          <Name>Martin Hudson</Name>
+                          <Name>Martin1 Hudson</Name>
                         </Contact>
-                        <Date>2013-05-13T00:00:00</Date>
-                        <DueDate>2013-05-20T00:00:00</DueDate>
+                        <Date>2013-06-13T00:00:00</Date>
+                        <DueDate>2013-06-20T00:00:00</DueDate>
                         <LineAmountTypes>Exclusive</LineAmountTypes>
                         <LineItems>
                           <LineItem>
                             <Description>Monthly rental for property at 56a Wilkins Avenue</Description>
-                            <Quantity>4.3400</Quantity>
-                            <UnitAmount>395.00</UnitAmount>
+                            <Quantity>4.3500</Quantity>
+                            <UnitAmount>396.00</UnitAmount>
                             <AccountCode>200</AccountCode>
                           </LineItem>
                         </LineItems>
@@ -383,7 +383,7 @@ if (isset($_REQUEST['invoicesmodified'])) {
        }elseif(isset($_REQUEST['method']) && $_REQUEST['method'] == "put" ){
     $xml = "<Contacts>
             <Contact>
-              <Name>Orlena Greenville</Name>
+              <Name>Orlena1 Greenville</Name>
             </Contact>
           </Contacts>";
     $response = $XeroOAuth->request('PUT', $XeroOAuth->url('Contacts', 'core'), array(), $xml);
@@ -613,5 +613,32 @@ if( isset($_REQUEST['items'])) {
        }
 
    }
+
+if (isset($_REQUEST['GetAllLinkedTransactions'])) {
+        $response = $XeroOAuth->request('GET', $XeroOAuth->url('LinkedTransactions', 'core'), array('Where' => $_REQUEST['where']));
+        if ($XeroOAuth->response['code'] == 200) {
+            $LinkedTransactions = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+            echo "There are " . count($LinkedTransactions->LinkedTransactions[0]). " LinkedTransactions in this Xero organisation, the first one is: </br>";
+            pr($LinkedTransactions->LinkedTransactions[0]->LinkedTransaction);
+        } else {
+            outputError($XeroOAuth);
+        }
+    }
+
+if (isset($_REQUEST['LinkedTransaction'])) {
+       $xml = "<LinkedTransaction>
+  <SourceTransactionID>4a44f84d-cb7c-4f6f-81cb-5314fd3f2f0f</SourceTransactionID>
+  <SourceLineItemID>f93f11fb-d4a1-4d87-9830-a9bd2169cdca</SourceLineItemID> 
+  <ContactID>b4bb131a-72b0-4543-bf36-6dc9703605ea</ContactID>
+</LinkedTransaction>";
+        $response = $XeroOAuth->request('POST', $XeroOAuth->url('LinkedTransaction', 'core'), array(), $xml);
+        if ($XeroOAuth->response['code'] == 200) {
+            $LinkedTransaction = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+            echo "There are " . count($LinkedTransaction->LinkedTransaction[0]). " Item created: </br>";
+            pr($LinkedTransaction->LinkedTransaction[0]->LinkedTransaction);
+        } else {
+            outputError($XeroOAuth);
+        }
+    }
 
 }
