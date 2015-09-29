@@ -33,6 +33,9 @@ function testLinks()
                 <li><a href="?trackingcategories=1&method=put">Tracking Categories - PUT</a></li>
                 <li><a href="?trackingcategories=1&method=archive">Tracking Categories - ARCHIVE</a></li>
                 <li><a href="?trackingcategories=1&method=restore">Tracking Categories - restore to active</a></li>
+                <li><a href="?GetAllLinkedTransactions=1">Get All LinkedTransactions</a></li>
+                <li><a href="?LinkedTransaction=1">LinkedTransaction POST</a></li>
+                <li><a href="?CreditNotesAllocation=1&method=PUT">CreditNotes Allocation</a></li>
                 </ul>
 
                 <br/><Strong>Payroll API</Strong>
