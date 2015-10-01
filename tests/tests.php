@@ -196,8 +196,8 @@ if ( isset($_REQUEST['wipe'])) {
                         <Contact>
                           <Name>Steve Buscemi</Name>
                         </Contact>
-                        <Date>2014-05-13T00:00:00</Date>
-                        <DueDate>2014-05-20T00:00:00</DueDate>
+                        <Date>2015-05-13T00:00:00</Date>
+                        <DueDate>2015-05-20T00:00:00</DueDate>
                         <LineAmountTypes>Exclusive</LineAmountTypes>
                         <LineItems>
                           <LineItem>
@@ -208,7 +208,8 @@ if ( isset($_REQUEST['wipe'])) {
                           </LineItem>
                         </LineItems>
                       </Invoice>
-                    </Invoices>";
+			         </Invoices>
+			";
             $response = $XeroOAuth->request('PUT', $XeroOAuth->url('Invoices', 'core'), array('unitdp' => '4'), $xml);
             if ($XeroOAuth->response['code'] == 200) {
                 $invoice = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
@@ -223,12 +224,12 @@ if ( isset($_REQUEST['wipe'])) {
         } elseif (isset($_REQUEST['method']) && $_REQUEST['method'] == "post" ) {
             $xml = "<Invoices>
                       <Invoice>
-                        <Type>ACCREC</Type>
+                        <Type>ACCREC</Type><Status>AUTHORISED</Status>
                         <Contact>
                           <Name>Martin Hudson</Name>
                         </Contact>
-                        <Date>2013-05-13T00:00:00</Date>
-                        <DueDate>2013-05-20T00:00:00</DueDate>
+                        <Date>2015-05-13T00:00:00</Date>
+                        <DueDate>2015-05-20T00:00:00</DueDate>
                         <LineAmountTypes>Exclusive</LineAmountTypes>
                         <LineItems>
                           <LineItem>
@@ -260,7 +261,7 @@ if ( isset($_REQUEST['wipe'])) {
 	                if ($_REQUEST['invoice']=="attachment") {
 	                	$attachmentFile = file_get_contents('http://i.imgur.com/mkDFLf2.png');
 
-	                    $response = $XeroOAuth->request('PUT', $XeroOAuth->url('Invoice/'.$invoices->Invoices[0]->Invoice->InvoiceID.'/Attachments/image.png', 'core'), array(), $attachmentFile, 'file');
+	                    $response = $XeroOAuth->request('PUT', $XeroOAuth->url('Invoice/'.$invoices->Invoices[0]->Invoice->InvoiceID.'/Attachments/image1.png', 'core'), array('IncludeOnline' => 'True'), $attachmentFile, 'file');
 	                		if ($XeroOAuth->response['code'] == 200) {
                 					echo "Attachment successfully created against this invoice.";
 				            } else {
