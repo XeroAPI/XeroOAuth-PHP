@@ -90,7 +90,7 @@ class OAuthSimple {
      * @param api_key {string}       The API Key (sometimes referred to as the consumer key) This value is usually supplied by the site you wish to use.
      * @param shared_secret (string) The shared secret. This value is also usually provided by the site you wish to use.
      */
-    function OAuthSimple ($APIKey = "",$sharedSecret=""){
+    public function __construct ($APIKey = "",$sharedSecret=""){
         if (!empty($APIKey))
             $this->_secrets{'consumer_key'}=$APIKey;
         if (!empty($sharedSecret))
