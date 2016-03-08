@@ -626,7 +626,7 @@ class XeroOAuth {
 				}
 				$validTo = date ( 'Y-m-d H:i:s', $data ['validTo_time_t'] );
 				if (time () > $data ['validTo_time_t']) {
-					$testOutput ['ssl_cert_error'] = "Application cert cert expired - cert valid to " . $validFrom . "\n";
+					$testOutput ['ssl_cert_error'] = "Application cert expired - cert valid to " . $validTo . "\n";
 				}
 			}
 			if (! file_exists ( $this->config ['rsa_private_key'] ))
