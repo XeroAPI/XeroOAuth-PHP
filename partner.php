@@ -17,7 +17,7 @@ define ( "XRO_APP_TYPE", "Partner" );
 /**
  * Set a user agent string that matches your application name as set in the Xero developer centre
  */
-$useragent = "Ronan Private Test";
+$useragent = "Ronan Partner Test";
 
 /**
  * Set your callback url or set 'oob' if none required
@@ -36,8 +36,8 @@ define ( "OAUTH_CALLBACK", 'http://localhost/XeroOAuth-PHP/partner.php' );
 include 'tests/testRunner.php';
 
 $signatures = array (
-		'consumer_key' => 'YOURCONSUMERKEY',
-		'shared_secret' => 's',
+		'consumer_key' => '——YOUR-CONSUMER-KEY—',
+		'shared_secret' => '——YOUR-CONSUMER-SECRET—',
 		// API versions
 		'core_version' => '2.0',
 		'payroll_version' => '1.0',
@@ -48,11 +48,14 @@ if (XRO_APP_TYPE == "Private" || XRO_APP_TYPE == "Partner") {
 	$signatures ['rsa_private_key'] = BASE_PATH . '/certs/privatekey.pem';
 	$signatures ['rsa_public_key'] = BASE_PATH . '/certs/publickey.cer';
 }
+
+/*  ENTRUST CERTIFICATE DEPRECATED
 if (XRO_APP_TYPE == "Partner") {
 	$signatures ['curl_ssl_cert'] = BASE_PATH . '/certs/entrust-cert.pem';
 	$signatures ['curl_ssl_password'] = '1234';
-	$signatures ['curl_ssl_key'] = BASE_PATH . '/certs/entrust-private.pem';
+	$signatures ['curl_ssl_key'] = BASE_PATH . '/certs/entrust-private-nopass.pem';
 }
+*/
 
 $XeroOAuth = new XeroOAuth ( array_merge ( array (
 		'application_type' => XRO_APP_TYPE,

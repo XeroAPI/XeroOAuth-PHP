@@ -49,8 +49,8 @@ class XeroOAuth {
 					break;
 				case "Partner" :
 					$this->_xero_defaults = array (
-							'xero_url' => 'https://api-partner.network.xero.com/',
-							'site' => 'https://api-partner.network.xero.com',
+							'xero_url' => 'https://api.xero.com/',
+							'site' => 'https://api.xero.com',
 							'authorize_url' => 'https://api.xero.com/oauth/Authorize',
 							'signature_method' => 'RSA-SHA1' 
 					);
@@ -264,6 +264,7 @@ class XeroOAuth {
 				CURLINFO_HEADER_OUT => TRUE 
 		) );
 		
+		/* ENTRUST CERTIFICATE DEPRECATED
 		if ($this->config ['application_type'] == "Partner") {
 			curl_setopt_array ( $c, array (
 					// ssl client cert options for partner apps
@@ -272,6 +273,7 @@ class XeroOAuth {
 					CURLOPT_SSLKEY => $this->config ['curl_ssl_key'] 
 			) );
 		}
+		*/
 		
 		if ($this->config ['curl_proxyuserpwd'] !== false)
 			curl_setopt ( $c, CURLOPT_PROXYUSERPWD, $this->config ['curl_proxyuserpwd'] );
@@ -598,6 +600,8 @@ class XeroOAuth {
 	 */
 	function diagnostics() {
 		$testOutput = array ();
+
+		/* ENTRUST CERTIFICATE DEPRECATED
 		if ($this->config ['application_type'] == 'Partner') {
 			if (! file_get_contents ( $this->config ['curl_ssl_cert'] )) {
 				$testOutput ['ssl_cert_error'] = "Can't read the Xero Entrust cert. You need one for partner API applications. http://developer.xero.com/documentation/getting-started/partner-applications/ \n";
@@ -613,6 +617,7 @@ class XeroOAuth {
 				}
 			}
 		}
+		*/
 		
 		if ($this->config ['application_type'] == 'Partner' || $this->config ['application_type'] == 'Private') {
 			
