@@ -120,9 +120,12 @@ XeroOAuth class is based on code and structure derived from the [tmhOAuth](https
 
 ## Major change history
 
-#### 0.7 - 16th December 2016
+#### 0.8 - 16th December 2016
 Deprecated Entrust Certificates for Partner Apps by commenting out related code and updating base URL to api.xero.com
 
+#### 0.7 - 1st Feb 2016
+PHP7 support via @tomcastleman
+Moved releases to Github release function
 #### 0.6 - 19th April 2015
 
 Added composer support.
