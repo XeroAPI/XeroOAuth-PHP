@@ -31,7 +31,7 @@ The request function lies at the core of any communication with the API. There a
 ###### Parameters
 * Method: the API method to be used (GET, PUT, POST)
 * URL: the URL of the API endpoint. This is handled by a special function (see below)
-* Parameters: an associative array of parameters such as where, order by etc (see <http://developer.xero.com/documentation/getting-started/http-requests-and-responses/>)
+* Parameters: an associative array of parameters such as where, order by etc (see <https://developer.xero.com/documentation/api/requests-and-responses/>)
 * XML: request data (for PUT and POST operations)
 * Format: response format (currently xml, json & pdf are supported). Note that PDF is not supported for all endpoints
 
