@@ -19,7 +19,7 @@ class XeroOAuth {
 	/**
 	 * Creates a new XeroOAuth object
 	 *
-	 * @param string $config,
+	 * @param array $config,
 	 *        	the configuration settings
 	 */
 	function __construct($config) {
