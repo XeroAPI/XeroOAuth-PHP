@@ -1,4 +1,4 @@
-#### Warning: This lib is no longer maintained. Please use this one: https://github.com/calcinai/xero-php
+# Warning: This lib is no longer maintained. Please use this one: https://github.com/calcinai/xero-php
 
 
 XeroOAuth-PHP
