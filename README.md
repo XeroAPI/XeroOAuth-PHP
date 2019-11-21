@@ -1,8 +1,15 @@
-# Warning: This lib is no longer maintained. Please use this one: https://github.com/calcinai/xero-php
+# Warning: This lib is no longer maintained. 
+
+## Looking for OAuth 2.0?
+Please checkout {Xero PHP sdk for OAuth 2.0](https://github.com/XeroAPI/xero-php-oauth2) and it's companion [kitchen sync app](https://github.com/XeroAPI/xero-php-oauth2-app)
+
+## Looking for OAuth 1.0a?
+Please checkout the community project https://github.com/calcinai/xero-php
 
 
-XeroOAuth-PHP
+XeroOAuth-PHP (DEPRECATED)
 -----------------------
+This repository has been archived and no further issues or pull requests will reviewed.  Feel free to fork the repo and work with the code.
 
 PHP library for working with the Xero OAuth API.
 
