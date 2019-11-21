@@ -1,7 +1,7 @@
 # Warning: This lib is no longer maintained. 
 
 ## Looking for OAuth 2.0?
-Please checkout {Xero PHP sdk for OAuth 2.0](https://github.com/XeroAPI/xero-php-oauth2) and it's companion [kitchen sync app](https://github.com/XeroAPI/xero-php-oauth2-app)
+Please checkout [Xero PHP sdk for OAuth 2.0](https://github.com/XeroAPI/xero-php-oauth2) and it's companion [kitchen sync app](https://github.com/XeroAPI/xero-php-oauth2-app)
 
 ## Looking for OAuth 1.0a?
 Please checkout the community project https://github.com/calcinai/xero-php
