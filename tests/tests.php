@@ -611,4 +611,50 @@ if( isset($_REQUEST['items'])) {
 
    }
 
+
+ if(isset($_REQUEST['CreditNotesAllocation']) && $_REQUEST['method']=="PUT"){
+    $xml="<Allocations>
+    <Allocation>
+      <AppliedAmount>1.50</AppliedAmount>
+      <Invoice>
+      <InvoiceID>2404f66d-76a2-4e85-b80e-7dd692fe3588</InvoiceID>
+    </Invoice>
+     </Allocation>
+   </Allocations>";
+   $response = $XeroOAuth->request('PUT', $XeroOAuth->url('CreditNotes/1e2d74e7-2fa8-45ec-9fd5-b459778c0752/Allocations', 'core'), array('SummarizeErrors' => 'false'), $xml);
+       if ($XeroOAuth->response['code'] == 200) {
+           $TrackingCategories = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+           echo "The CreditNotes is now Allocated to invoice specified: " . $CreditNotes->CreditNotes[0]->CreditNotes;
+       } else {
+           outputError($XeroOAuth);
+       }
+     }
+
+   if (isset($_REQUEST['GetAllLinkedTransactions'])) {
+       $response = $XeroOAuth->request('GET', $XeroOAuth->url('LinkedTransactions', 'core'), array('Where' => $_REQUEST['where']));
+        if ($XeroOAuth->response['code'] == 200) {
+         $LinkedTransactions = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+           echo "There are " . count($LinkedTransactions->LinkedTransactions[0]). " LinkedTransactions in this Xero organisation, the first one is: </br>";
+           pr($LinkedTransactions->LinkedTransactions[0]->LinkedTransaction);
+     } else {
+           outputError($XeroOAuth);
+        }
+    }
+
+if (isset($_REQUEST['LinkedTransaction'])) {
+       $xml = "<LinkedTransaction>
+               <SourceTransactionID>4a44f84d-cb7c-4f6f-81cb-5314fd3f2f0f</SourceTransactionID>
+              <SourceLineItemID>f93f11fb-d4a1-4d87-9830-a9bd2169cdca</SourceLineItemID> 
+             <ContactID>b4bb131a-72b0-4543-bf36-6dc9703605ea</ContactID>
+             </LinkedTransaction>";
+        $response = $XeroOAuth->request('POST', $XeroOAuth->url('LinkedTransaction', 'core'), array(), $xml);
+        if ($XeroOAuth->response['code'] == 200) {
+            $LinkedTransaction = $XeroOAuth->parseResponse($XeroOAuth->response['response'], $XeroOAuth->response['format']);
+            echo "There are " . count($LinkedTransaction->LinkedTransaction[0]). " Item created: </br>";
+            pr($LinkedTransaction->LinkedTransaction[0]->LinkedTransaction);
+        } else {
+            outputError($XeroOAuth);
+        }
+    }
+
 }
