@@ -13,6 +13,8 @@ This repository has been archived and no further issues or pull requests will re
 
 PHP library for working with the Xero OAuth API.
 
+[![Latest Stable Version](https://poser.pugx.org/xero/xerooauth-php/v/stable)](https://packagist.org/packages/xero/xerooauth-php) [![Total Downloads](https://poser.pugx.org/xero/xerooauth-php/downloads)](https://packagist.org/packages/xero/xerooauth-php) [![Latest Unstable Version](https://poser.pugx.org/xero/xerooauth-php/v/unstable)](https://packagist.org/packages/xero/xerooauth-php) [![License](https://poser.pugx.org/xero/xerooauth-php/license)](https://packagist.org/packages/xero/xerooauth-php)
+
 Intro
 ======
 XeroOAuth-PHP is a sample library for use with the Xero API (<http://developer.xero.com>). The Xero API uses OAuth 1.0a, but we would not recommend using this library for other OAuth 1.0a APIs as
@@ -25,6 +27,11 @@ This library is designed to get a developer up and running quickly with the OAut
 * php\_curl extension - ensure a recent version (7.30+)
 * php\_openssl extension
 
+## Install 
+Either download and include, or install via Composer:
+```
+composer require xero/xerooauth-php
+```
 
 ## Setup
 To get setup, you will need to modify the values in the \_config.php file to your own requirements and application settings or see the customised example file for each different application type, public.php, private.php or partner.php.
