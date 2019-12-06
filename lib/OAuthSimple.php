@@ -262,10 +262,15 @@ class OAuthSimple {
         $this->setParameters($args['parameters']);
         $normParams = $this->_normalizedParameters();
         $this->_parameters['oauth_signature'] = $this->_generateSignature($normParams);
+        if (strpos($this->_path,'?') !== false) {
+            $returnURL = $this->_path . '&' . $this->_normalizedParameters('true');
+        } else {
+            $returnURL = $this->_path . '?' . $this->_normalizedParameters('true');
+        }
         return Array(
             'parameters' => $this->_parameters,
             'signature' => $this->_oauthEscape($this->_parameters['oauth_signature']),
-            'signed_url' => $this->_path . '?' . $this->_normalizedParameters('true'),
+            'signed_url' => $returnURL,
             'header' => $this->getHeaderString(),
             'sbs'=> $this->sbs
             );
